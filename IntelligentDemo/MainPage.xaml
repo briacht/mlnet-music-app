@@ -8,7 +8,8 @@
     mc:Ignorable="d">
 
     <Grid Name="MainGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
+        <pages:EmotionVideo x:Name="EmotionVideo" Grid.Column="0" Grid.Row="1"></pages:EmotionVideo>
+        <!--<Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -20,6 +21,6 @@
 
         <pages:TextAnalysisPage x:Name="TextAnalysis" Grid.Column="1" Grid.Row="0"></pages:TextAnalysisPage>
         <pages:EmotionVideo x:Name="EmotionVideo" Grid.Column="0" Grid.Row="1"></pages:EmotionVideo>
-        <pages:EmotionTwitter x:Name="EmotionTwitter" Grid.Column="1" Grid.Row="1"></pages:EmotionTwitter>
+        <pages:EmotionTwitter x:Name="EmotionTwitter" Grid.Column="1" Grid.Row="1"></pages:EmotionTwitter>-->
     </Grid>
 </Page>

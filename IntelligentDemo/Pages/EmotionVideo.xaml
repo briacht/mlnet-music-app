@@ -4,18 +4,60 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Width="200" Margin="10" Click="Button_Click">Anger</Button>
-            <Button Width="200" Margin="10" Click="Button_Click">Contempt</Button>
-            <Button Width="200" Margin="10" Click="Button_Click">Disgust</Button>
-            <Button Width="200" Margin="10" Click="Button_Click">Fear</Button>
-            <Button Width="200" Margin="10" Click="Button_Click">Happiness</Button>
-            <Button Width="200" Margin="10" Click="Button_Click">Neutral</Button>
-            <Button Width="200" Margin="10" Click="Button_Click">Sadness</Button>
-            <Button Width="200" Margin="10" Click="Button_Click">Surprise</Button>
-        </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Image Width="200" Grid.Row="2" Source="sample.jpg"/>
+
+            <controls:Carousel 
+                Grid.Row="0"
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center"
+                x:Name="CarouselControl"
+                Orientation="Horizontal"
+                ItemDepth="400"
+                ItemMargin="20"
+                ItemRotationX="-40"
+                InvertPositive="true"
+                ItemsSource="{x:Bind Queue}"
+            >
+
+                <controls:Carousel.EasingFunction>
+                    <CubicEase EasingMode="EaseOut" />
+                </controls:Carousel.EasingFunction>
+
+                <controls:Carousel.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="300" Width="400" BorderBrush="Black" BorderThickness="1" CornerRadius="10" Padding="25">
+                            <controls:DockPanel>
+                                <Grid controls:DockPanel.Dock="Bottom" Height="30" >
+                                    <TextBlock Text="{Binding Emotion}"/>
+                                </Grid>
+
+                                <Image Height="300" Source="{Binding BitmapImage}"/>
+                            </controls:DockPanel>
+                        </Grid>
+                    </DataTemplate>
+                </controls:Carousel.ItemTemplate>
+            </controls:Carousel>
+            <Grid Grid.Row="1">
+                <CaptureElement Name="LiveVideo" Stretch="Uniform"/>
+                <Grid x:Name="ImageProcessing" Visibility="Collapsed">
+                    <Image x:Name="StillCapture" Stretch="Uniform" />
+                    <Grid Height="30" VerticalAlignment="Bottom" Background="White" Margin="20" Width="200">
+                        <TextBlock x:Name="Status" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"></TextBlock>
+                    </Grid>
+                </Grid>
+                <Ellipse x:Name="CaptureLight" HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="Collapsed" Fill="Red" Margin="50" Width="200" Height="200" />
+            </Grid>
+        </Grid>
+
     </Grid>
 </Page>

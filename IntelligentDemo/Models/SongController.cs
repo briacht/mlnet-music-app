@@ -15,10 +15,16 @@ namespace IntelligentDemo.Models
         public byte Duration { get; set; }
     }
 
+    public class BarStartedEventArgs : EventArgs
+    {
+        public int BarNumber { get; set; }
+    }
+
     public class SongController : IDisposable
     {
         private static byte BASS_CHANNEL = 0;
         private static byte MELODY_CHANNEL = 1;
+        private static byte PERCUSSION_CHANNEL = 9;
 
         private DispatcherTimer _timer;
         private IMidiOutPort midiOutPort;
@@ -27,6 +33,13 @@ namespace IntelligentDemo.Models
         private List<IMidiMessage>[] _carryOver;
 
         private IEnumerable<NoteCommand> _nextBassBar;
+
+        public event EventHandler<BarStartedEventArgs> BarStarted;
+
+        protected virtual void OnBarStarted(BarStartedEventArgs e)
+        {
+            BarStarted?.Invoke(this, e);
+        }
 
         public SongController()
         {
@@ -64,16 +77,21 @@ namespace IntelligentDemo.Models
                 {
                     commands[note.Position - 1].Add(new MidiNoteOnMessage(BASS_CHANNEL, note.Note, note.Velocity));
                     var off = (note.Position - 1) + note.Duration;
-                    if(off < 16)
+                    if (off < 16)
                     {
                         commands[off].Add(new MidiNoteOffMessage(BASS_CHANNEL, note.Note, note.Velocity));
                     }
                     else
                     {
-                        _carryOver[off-16].Add(new MidiNoteOffMessage(BASS_CHANNEL, note.Note, note.Velocity));
+                        _carryOver[off - 16].Add(new MidiNoteOffMessage(BASS_CHANNEL, note.Note, note.Velocity));
                     }
                 }
             }
+
+            commands[0].Add(new MidiNoteOnMessage(PERCUSSION_CHANNEL, 81, 100));
+            commands[4].Add(new MidiNoteOnMessage(PERCUSSION_CHANNEL, 80, 40));
+            commands[8].Add(new MidiNoteOnMessage(PERCUSSION_CHANNEL, 80, 40));
+            commands[12].Add(new MidiNoteOnMessage(PERCUSSION_CHANNEL,80, 40));
 
             return commands;
         }
@@ -90,6 +108,7 @@ namespace IntelligentDemo.Models
             if (noteInBar == 0)
             {
                 _currentBar = BuildNextBar();
+                OnBarStarted(new BarStartedEventArgs { BarNumber = _noteCount / 16 + 1 });
             }
 
             if (_currentBar != null)

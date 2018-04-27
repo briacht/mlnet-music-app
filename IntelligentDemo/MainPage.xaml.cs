@@ -30,9 +30,9 @@ namespace IntelligentDemo
         {
             this.InitializeComponent();
 
-            this.EmotionTwitter.Controller = _controller;
+            //this.EmotionTwitter.Controller = _controller;
             this.EmotionVideo.Controller = _controller;
-            this.TextAnalysis.Controller = _controller;
+            //this.TextAnalysis.Controller = _controller;
         }
 
         public void Dispose()
