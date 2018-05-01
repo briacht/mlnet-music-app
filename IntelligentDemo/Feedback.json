@@ -1,0 +1,32 @@
+﻿[
+  {
+    "URL": "https://www.reddit.com/r/dotnet/comments/5r3iza/why_i_decided_to_abandon_dotnet_core_and_return/",
+    "Text": "As a side note, at a couple of conferences, I've chatted with Rowan Miller, the EF Project Lead at Microsoft, about missing features. To be candid, he was a smug jackass, totally unconcerned. Maybe I just caught him on a bad day.",
+    "Image": ""
+  },
+  {
+    "URL": "https://blogs.msdn.microsoft.com/dotnet/2014/11/12/net-core-is-open-source/",
+    "Text": "C# is the most modern, and one of the best languages we have in the market. Linux is the best platform. Hope to see them truly together. Thank you MS guys for the contributing into world industry.",
+    "Image": ""
+  },
+  {
+    "URL": "https://twitter.com/HackerChick/status/533002372214431744",
+    "Text": "Wait. What? Microsoft Open Sources .NET, Saying It Will Run on Linux and Mac @WIRED http://j.mp/1EDCBYA",
+    "Image": ""
+  },
+  {
+    "URL": "https://twitter.com/bertjwregeer/status/532612350256218112",
+    "Text": "I know it’s cold … but I never thought I’d see hell freeze over. MS releasing .NET as MIT open source? Damn!",
+    "Image": ""
+  },
+  {
+    "URL": "https://github.com/aspnet/EntityFrameworkCore/issues/4423#issuecomment-182556929",
+    "Text": "It looks like a sadomasochistic perversion when Microsoft officially recommends SQLite for a client UWP applications and totally silent about anyway officially supported ESENT. What? Microsoft staff are totally replaced by an iOS hipsters or what?",
+    "Image": ""
+  },
+  {
+    "URL": "https://twitter.com/matthewwarren/status/986277626108096518",
+    "Text": "It's very impressive to watch the 'continuous performance testing' infrastructure that Microsoft have in place for .NET Core https://github.com/dotnet/coreclr/issues/17544 … tracks perf over time, compares to a known baseline and helps identify the commit that introduced the regression, nice!!",
+    "Image": ""
+  }
+]
