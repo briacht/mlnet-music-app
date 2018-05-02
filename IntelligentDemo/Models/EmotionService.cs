@@ -33,25 +33,32 @@ namespace IntelligentDemo.Models
 
         private async Task<string> DetectEmotion(HttpContent content)
         {
-            var subscriptionKey = App.Secrets.EmotionKey;
-            var uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
-
-            HttpClient client = new HttpClient();
-
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
-            string uri = uriBase + "?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=emotion";
-
-            var response = await client.PostAsync(uri, content);
-            var resultString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<FaceDetectionResult[]>(resultString);
-
-            if (result.Any())
+            try
             {
-                return result.First().FaceAttributes.Emotion.OrderByDescending(t => t.Value).First().Key;
+                var subscriptionKey = App.Secrets.EmotionKey;
+                var uriBase = "https://westus.api.cognitive.microsoft.com/face/v1.0/detect";
+
+                HttpClient client = new HttpClient();
+
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+                string uri = uriBase + "?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=emotion";
+
+                var response = await client.PostAsync(uri, content);
+                var resultString = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<FaceDetectionResult[]>(resultString);
+
+                if (result.Any())
+                {
+                    return result.First().FaceAttributes.Emotion.OrderByDescending(t => t.Value).First().Key;
+                }
+                else
+                {
+                    return "Did not detect a face";
+                }
             }
-            else
+            catch (Exception)
             {
-                return "Did not detect a face";
+                return "API failed";
             }
         }
 

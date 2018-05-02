@@ -21,8 +21,6 @@ namespace IntelligentDemo
             _feedbackPage = new Lazy<FeedbackPage>(() => new FeedbackPage(_controller));
             _twitterPage = new Lazy<TwitterPage>(() => new TwitterPage(_controller));
 
-            // Content.Content = _twitterPage.Value;
-
             Content.Content = new SplitPage(new UserControl[] {_cameraPage.Value, _feedbackPage.Value, _twitterPage.Value });
         }
 

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using Tweetinvi;
 using Tweetinvi.Events;
 using Tweetinvi.Models;
+using Tweetinvi.Parameters;
 
 namespace IntelligentDemo.Pages
 {
@@ -16,7 +17,7 @@ namespace IntelligentDemo.Pages
     /// </summary>
     public partial class TwitterPage : UserControl
     {
-        private const string HASHTAG = "#demotest";
+        private const string HASHTAG = "#happyface";
 
         private static readonly Dictionary<string, IEnumerable<NoteCommand>> _percussionLines = InitializePercussionLines();
         private EmotionService _emotionService = new EmotionService();
@@ -44,7 +45,14 @@ namespace IntelligentDemo.Pages
 
         private async Task LoadRecentTweets()
         {
-            var search = Search.SearchTweets(HASHTAG);
+            var searchParameter = new SearchTweetsParameters(HASHTAG)
+            {
+                SearchType = SearchResultType.Popular,
+                MaximumNumberOfResults = 10,
+                Filters = TweetSearchFilters.Images
+            };
+
+            var search = Search.SearchTweets(searchParameter);
             foreach (var tweet in search)
             {
                 await Process(tweet);
@@ -65,6 +73,7 @@ namespace IntelligentDemo.Pages
             {
                 var imgUrl = tweet.Entities.Medias[0].MediaURL;
                 var emotion = await _emotionService.DetectEmotionFromUrl(imgUrl);
+
                 var result = new Tweet
                 {
                     ImageUrl = imgUrl,
