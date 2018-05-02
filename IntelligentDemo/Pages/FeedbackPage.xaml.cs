@@ -7,13 +7,13 @@ using System.Windows.Controls;
 
 namespace IntelligentDemo.Pages
 {
-    public partial class DotnetFeedback : UserControl, IDisposable
+    public partial class FeedbackPage : UserControl, IDisposable
     {
         private LightController _lightController;
         private Feedback[] _data;
         private int _currentIndex;
 
-        public DotnetFeedback(SongController controller)
+        public FeedbackPage(SongController controller)
         {
             InitializeComponent();
 

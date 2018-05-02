@@ -117,7 +117,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\DotnetFeedback.xaml">
+    <Page Include="Pages\FeedbackPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -131,8 +131,8 @@
     <Compile Include="Models\LightController.cs" />
     <Compile Include="Models\MidiInterface.cs" />
     <Compile Include="Models\SongController.cs" />
-    <Compile Include="Pages\DotnetFeedback.xaml.cs">
-      <DependentUpon>DotnetFeedback.xaml</DependentUpon>
+    <Compile Include="Pages\FeedbackPage.xaml.cs">
+      <DependentUpon>FeedbackPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SplitPage.xaml.cs">
       <DependentUpon>SplitPage.xaml</DependentUpon>

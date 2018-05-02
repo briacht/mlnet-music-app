@@ -10,14 +10,14 @@ namespace IntelligentDemo
     {
         private SongController _controller = new SongController();
         private Lazy<CameraPage> _cameraPage;
-        private Lazy<DotnetFeedback> _feedbackPage;
+        private Lazy<FeedbackPage> _feedbackPage;
 
         public MainWindow()
         {
             InitializeComponent();
 
             _cameraPage = new Lazy<CameraPage>(() => new CameraPage(_controller));
-            _feedbackPage = new Lazy<DotnetFeedback>(() => new DotnetFeedback(_controller));
+            _feedbackPage = new Lazy<FeedbackPage>(() => new FeedbackPage(_controller));
 
             Content.Content = new SplitPage(new UserControl[] {_cameraPage.Value, _feedbackPage.Value });
         }
