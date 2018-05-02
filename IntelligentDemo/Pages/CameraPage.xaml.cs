@@ -49,10 +49,10 @@ namespace IntelligentDemo.Pages
                     _nextIndex = null;
                 }
 
-                
+
             }
 
-            if(e.BarNumber % 4 == 0)
+            if (e.BarNumber % 4 == 0)
             {
                 var next = _currentIndex.HasValue ?
                     Images.Skip(_currentIndex.Value + 1).Where(i => _bassLines.ContainsKey(i.Emotion)).FirstOrDefault()
@@ -83,7 +83,7 @@ namespace IntelligentDemo.Pages
             var bmp = new BitmapImage(new Uri(img));
 
             var result = new FeedbackViewModel { Emotion = "Analyzing...", Image = bmp };
-            result.Emotion = await _emotionService.DetectEmotion(path);
+            result.Emotion = await _emotionService.DetectEmotionFromFile(path);
             Images.Add(result);
         }
 
@@ -93,7 +93,7 @@ namespace IntelligentDemo.Pages
             var dimension = Convert.ToInt32(snap.Width < snap.Height ? snap.Width : snap.Height);
 
             Int32Rect rect;
-            if(snap.Width < snap.Height * 1.33)
+            if (snap.Width < snap.Height * 1.33)
             {
                 // Padding is on top/bottom
                 var width = Convert.ToInt32(snap.Width);
@@ -240,7 +240,7 @@ namespace IntelligentDemo.Pages
                 {
                     return _playing
                         ? new SolidColorBrush(Color.FromRgb(0, 255, 0))
-                        : new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                        : new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 }
             }
 

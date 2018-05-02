@@ -22,10 +22,10 @@
                         <Border MaxWidth="250" MaxHeight="250" MinWidth="100" MinHeight="100" BorderBrush="Black" BorderThickness="1" CornerRadius="10" Margin="10" Background="{Binding Background}">
                                 <DockPanel>
                                     <Grid DockPanel.Dock="Bottom" Height="30" >
-                                        <TextBlock HorizontalAlignment="Center" Foreground="White" FontSize="20px"  Text="{Binding Emotion}"/>
+                                    <TextBlock HorizontalAlignment="Center" Foreground="#333333" FontWeight="Bold" FontSize="16px"  Text="{Binding Emotion}"/>
                                     </Grid>
 
-                                    <Image Source="{Binding Image}" Stretch="Uniform"/>
+                                    <Image Margin="10" Source="{Binding Image}" Stretch="Uniform"/>
                                 </DockPanel>
                         </Border>
                     </DataTemplate>

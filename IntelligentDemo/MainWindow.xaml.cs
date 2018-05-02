@@ -11,6 +11,7 @@ namespace IntelligentDemo
         private SongController _controller = new SongController();
         private Lazy<CameraPage> _cameraPage;
         private Lazy<FeedbackPage> _feedbackPage;
+        private Lazy<TwitterPage> _twitterPage;
 
         public MainWindow()
         {
@@ -18,8 +19,11 @@ namespace IntelligentDemo
 
             _cameraPage = new Lazy<CameraPage>(() => new CameraPage(_controller));
             _feedbackPage = new Lazy<FeedbackPage>(() => new FeedbackPage(_controller));
+            _twitterPage = new Lazy<TwitterPage>(() => new TwitterPage(_controller));
 
-            Content.Content = new SplitPage(new UserControl[] {_cameraPage.Value, _feedbackPage.Value });
+            // Content.Content = _twitterPage.Value;
+
+            Content.Content = new SplitPage(new UserControl[] {_cameraPage.Value, _feedbackPage.Value, _twitterPage.Value });
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)

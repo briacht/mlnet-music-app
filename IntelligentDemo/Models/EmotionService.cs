@@ -5,14 +5,33 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IntelligentDemo.Models
 {
     class EmotionService
     {
-        public async Task<string> DetectEmotion(string file)
+        public async Task<string> DetectEmotionFromFile(string file)
+        {
+            byte[] byteData = await Task.Run(() => GetImageAsByteArray(file));
+
+            using (ByteArrayContent content = new ByteArrayContent(byteData))
+            {
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                return await DetectEmotion(content);
+            }
+        }
+
+        public async Task<string> DetectEmotionFromUrl(string url)
+        {
+            using (StringContent content = new StringContent("{ \"url\": \"" + url + "\" }"))
+            {
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                return await DetectEmotion(content);
+            }
+        }
+
+        private async Task<string> DetectEmotion(HttpContent content)
         {
             var subscriptionKey = App.Secrets.EmotionKey;
             var uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
@@ -22,23 +41,17 @@ namespace IntelligentDemo.Models
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
             string uri = uriBase + "?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=emotion";
 
-            byte[] byteData = await Task.Run(() => GetImageAsByteArray(file));
+            var response = await client.PostAsync(uri, content);
+            var resultString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<FaceDetectionResult[]>(resultString);
 
-            using (ByteArrayContent content = new ByteArrayContent(byteData))
+            if (result.Any())
             {
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                var response = await client.PostAsync(uri, content);
-                var resultString = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<FaceDetectionResult[]>(resultString);
-
-                if (result.Any())
-                {
-                    return result.First().FaceAttributes.Emotion.OrderByDescending(t => t.Value).First().Key;
-                }
-                else
-                {
-                    return "Did not detect a face";
-                }
+                return result.First().FaceAttributes.Emotion.OrderByDescending(t => t.Value).First().Key;
+            }
+            else
+            {
+                return "Did not detect a face";
             }
         }
 

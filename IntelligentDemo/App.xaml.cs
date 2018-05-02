@@ -21,17 +21,27 @@ namespace IntelligentDemo
             base.OnStartup(e);
         }
 
-        public static SecretValues Secrets { get; } = SecretValues.Load();
+        public static Secrets Secrets { get; } = Secrets.Load();
 
-        public class SecretValues
+    }
+
+    public class Secrets
+    {
+        public static Secrets Load()
         {
-            public static SecretValues Load()
-            {
-                return JsonConvert.DeserializeObject<SecretValues>(File.ReadAllText("secrets.json"));
-            }
-
-            public string EmotionKey { get; set; }
-            public string SentimentKey { get; set; }
+            return JsonConvert.DeserializeObject<Secrets>(File.ReadAllText("secrets.json"));
         }
+
+        public string EmotionKey { get; set; }
+        public string SentimentKey { get; set; }
+        public Twitter Twitter { get; set; }
+    }
+
+    public class Twitter
+    {
+        public string ConsumerKey { get; set; }
+        public string ConsumerSecret { get; set; }
+        public string UserAccessToken { get; set; }
+        public string UserAccessSecret { get; set; }
     }
 }

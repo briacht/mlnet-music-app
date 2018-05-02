@@ -29,6 +29,7 @@ namespace IntelligentDemo.Models
         private List<Action<MidiWrapper>>[] _currentBar;
         private List<Action<MidiWrapper>>[] _carryOver;
         private IEnumerable<NoteCommand> _nextBassBar;
+        private IEnumerable<NoteCommand> _nextPercussionBar;
 
         public SongController()
         {
@@ -89,6 +90,15 @@ namespace IntelligentDemo.Models
                 }
             }
 
+            if (_nextPercussionBar != null)
+            {
+                foreach (var note in _nextPercussionBar)
+                {
+                    // Off commands not needed for percussion
+                    commands[note.Position - 1].Add(m => m.NoteOn(PERCUSSION_CHANNEL, note.Note, note.Velocity));
+                }
+            }
+
             // Metronome
             commands[0].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 81, 100));
             commands[4].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
@@ -101,6 +111,11 @@ namespace IntelligentDemo.Models
         public void SetNextBassBar(IEnumerable<NoteCommand> notes)
         {
             _nextBassBar = notes;
+        }
+
+        public void SetNextPercussionBar(IEnumerable<NoteCommand> notes)
+        {
+            _nextPercussionBar = notes;
         }
 
         private void OnSixteenthNotes()
