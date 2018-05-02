@@ -2,22 +2,24 @@
 using IntelligentDemo.Pages;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace IntelligentDemo
 {
     public partial class MainWindow : Window, IDisposable
     {
         private SongController _controller = new SongController();
+        private Lazy<CameraPage> _cameraPage;
+        private Lazy<DotnetFeedback> _feedbackPage;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Content.Content = new CameraPage(_controller);
-            //Content.Content = new DotnetFeedback(_controller);
+            _cameraPage = new Lazy<CameraPage>(() => new CameraPage(_controller));
+            _feedbackPage = new Lazy<DotnetFeedback>(() => new DotnetFeedback(_controller));
 
-            //var x = new CameraPage();
-            //x.Show();
+            Content.Content = new SplitPage(new UserControl[] {_cameraPage.Value, _feedbackPage.Value });
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)

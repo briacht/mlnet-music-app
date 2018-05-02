@@ -107,6 +107,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\EmotionService.cs" />
+    <Compile Include="Models\Feedback.cs" />
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
@@ -120,6 +121,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\SplitPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\FeedbackService.cs" />
@@ -128,6 +133,9 @@
     <Compile Include="Models\SongController.cs" />
     <Compile Include="Pages\DotnetFeedback.xaml.cs">
       <DependentUpon>DotnetFeedback.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SplitPage.xaml.cs">
+      <DependentUpon>SplitPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -153,6 +161,9 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="secrets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>

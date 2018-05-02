@@ -21,7 +21,7 @@
                     <DockPanel HorizontalAlignment="Stretch">
                         <Grid HorizontalAlignment="Center" DockPanel.Dock="Bottom">
                             <StackPanel>
-                                <TextBlock Text="{Binding DisplayScore}" HorizontalAlignment="Left" Margin="5,0,0,0"></TextBlock>
+                                <TextBlock Text="{Binding Score,  StringFormat=Sentiment: {0:P0}}" HorizontalAlignment="Left" Margin="5,0,0,0"></TextBlock>
                                 <Border Height="30"  HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Width="350">
                                     <Grid>
                                         <Border Width="{Binding Score, Converter={StaticResource ScoreToWidthConvertor}}" CornerRadius="5" HorizontalAlignment="Left" Background="{Binding Score, Converter={StaticResource ScoreToColorConvertor}}">

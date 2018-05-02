@@ -10,7 +10,7 @@ namespace IntelligentDemo.Pages
     public partial class DotnetFeedback : UserControl, IDisposable
     {
         private LightController _lightController;
-        private FeedbackService.Feedback[] _data;
+        private Feedback[] _data;
         private int _currentIndex;
 
         public DotnetFeedback(SongController controller)
@@ -19,7 +19,7 @@ namespace IntelligentDemo.Pages
 
             controller.BarStarted += (_, e) =>
             {
-                if (e.BarNumber > 1 && e.BarNumber % 2 == 1)
+                if (e.BarNumber > 1 && e.BarNumber % 4 == 1)
                 {
                     _currentIndex = (_currentIndex + 1) % _data.Length;
                     Refresh();
@@ -29,11 +29,13 @@ namespace IntelligentDemo.Pages
             _lightController = new LightController();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             var svc = new FeedbackService();
             _data = svc.GetFeedback().ToArray();
-            _currentIndex = 0;
+
+            await svc.AnalyzeFeedback(_data);
+
             Refresh();
         }
 

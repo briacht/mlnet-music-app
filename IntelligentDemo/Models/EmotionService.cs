@@ -14,8 +14,8 @@ namespace IntelligentDemo.Models
     {
         public async Task<string> DetectEmotion(string file)
         {
-            const string subscriptionKey = "";
-            const string uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
+            var subscriptionKey = App.Secrets.EmotionKey;
+            var uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
 
             HttpClient client = new HttpClient();
 
