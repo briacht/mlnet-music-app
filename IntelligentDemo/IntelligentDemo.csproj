@@ -180,6 +180,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Convertors\RatioConvertor.cs" />
+    <Compile Include="Convertors\HiddenWhenZeroConvertor.cs" />
+    <Compile Include="Convertors\VisibleWhenZeroConvertor.cs" />
+    <Compile Include="Convertors\VisibleWhenNullConvertor.cs" />
     <Compile Include="Models\EmotionService.cs" />
     <Compile Include="Models\Feedback.cs" />
     <Compile Include="Models\Music\BassLineGenerator.cs" />

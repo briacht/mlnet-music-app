@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -88,31 +89,44 @@ namespace IntelligentDemo.Pages
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
-            if (DetailsList.Items.Count > 0)
+            if (!playing)
             {
-                if(DetailsList.SelectedIndex < 0)
+                if (DetailsList.Items.Count > 0)
                 {
-                    DetailsList.SelectedIndex = 0;
+                    if (DetailsList.SelectedIndex < 0)
+                    {
+                        DetailsList.SelectedIndex = 0;
+                    }
+
+                    SetNext(DetailsList.SelectedIndex);
                 }
 
-                SetNext(DetailsList.SelectedIndex);
+                playing = true;
+                PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10));
             }
-
-            playing = true;
-            PlayButton.IsEnabled = false;
-            PauseButton.IsEnabled = true;
-        }
-
-        private void Pause_Click(object sender, RoutedEventArgs e)
-        {
-            playing = false;
-            _songController.SetNextBassBar(Array.Empty<NoteCommand>());
-            PlayButton.IsEnabled = true;
-            PauseButton.IsEnabled = false;
+            else
+            {
+                playing = false;
+                _songController.SetNextBassBar(Array.Empty<NoteCommand>());
+                PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
+            }
         }
 
         private async void Capture_Click(object sender, RoutedEventArgs e)
         {
+            CaptureButton.IsEnabled = false;
+            CaptureLight.Fill = new SolidColorBrush(Colors.Red);
+            CaptureLight.Visibility = Visibility.Visible;
+            await Task.Delay(200);
+            CaptureLight.Visibility = Visibility.Hidden;
+            await Task.Delay(200);
+            CaptureLight.Visibility = Visibility.Visible;
+            await Task.Delay(200);
+            CaptureLight.Visibility = Visibility.Hidden;
+            await Task.Delay(200);
+            CaptureLight.Fill = new SolidColorBrush(Colors.White);
+            CaptureLight.Visibility = Visibility.Visible;
+
             var path = WebcamViewer.TakeSnapshot();
             var img = CropImage(path);
             var bmp = new BitmapImage(new Uri(img));
@@ -121,11 +135,8 @@ namespace IntelligentDemo.Pages
             result.Emotion = await _emotionService.DetectEmotionFromFile(path);
             Images.Add(result);
 
-            // If it was the first image, select it
-            if (Images.Count == 1)
-            {
-                DetailsList.SelectedIndex = 0;
-            }
+            CaptureLight.Visibility = Visibility.Hidden;
+            CaptureButton.IsEnabled = true;
         }
 
         private static string CropImage(string filePath)
@@ -174,7 +185,7 @@ namespace IntelligentDemo.Pages
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            _songController?.SetBassVolume(e.NewValue);
+            _songController?.SetBassVolume(e.NewValue / 100);
         }
 
         public class FeedbackViewModel : INotifyPropertyChanged

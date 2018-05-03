@@ -18,7 +18,7 @@ namespace IntelligentDemo.Pages
     /// </summary>
     public partial class TwitterPage : UserControl, IDisposable
     {
-        private const string HASHTAG = "#happyface";
+        private const string HASHTAG = "#mldemotest";
 
         private static readonly Dictionary<string, IEnumerable<NoteCommand>> _percussionLines = InitializePercussionLines();
         private EmotionService _emotionService = new EmotionService();
@@ -41,6 +41,7 @@ namespace IntelligentDemo.Pages
 
             DetailsList.ItemsSource = Tweets;
 
+            LoadTestTweets();
             await LoadRecentTweets();
             ConnectToTwitterStream();
 
@@ -62,10 +63,35 @@ namespace IntelligentDemo.Pages
             };
 
             var search = Search.SearchTweets(HASHTAG);
-            foreach (var tweet in search.Take(20))
+
+            // TODO null when no Internet
+            if (search != null)
             {
-                await Process(tweet);
+                foreach (var tweet in search.Take(20))
+                {
+                    await Process(tweet);
+                }
             }
+        }
+
+        private void LoadTestTweets()
+        {
+            Tweets.Add(new Tweet
+            {
+                ImageUrl = "https://pbs.twimg.com/media/DcKzkzbUQAA6c1u.jpg",
+                Text = "This is a really long tweet that will reach the 280 character limit of Twitter, plus the API we are using will also stick the image URL on the end of the message, so we'll include that too just to make sure we get the most text we possibly can into this very long Tweet thing. Yay",
+                Emotion = "contempt",
+                Handle = "testuser99",
+                Name = "John Doe"
+            });
+            Tweets.Add(new Tweet
+            {
+                ImageUrl = "https://pbs.twimg.com/media/Dbl1dkuV0AAJFeP.jpg",
+                Text = HASHTAG,
+                Emotion = "sadness",
+                Handle = "someperson",
+                Name = "Peter Doe"
+            });
         }
 
         private void ConnectToTwitterStream()
@@ -87,7 +113,9 @@ namespace IntelligentDemo.Pages
                 {
                     ImageUrl = imgUrl,
                     Emotion = emotion,
-                    Text = tweet.Text
+                    Text = tweet.Text,
+                    Handle = tweet.CreatedBy.ScreenName,
+                    Name = tweet.CreatedBy.Name
                 };
 
                 App.Current.Dispatcher.Invoke(() => Tweets.Add(result));
@@ -121,7 +149,7 @@ namespace IntelligentDemo.Pages
                 }
             }
 
-            if (e.BarNumber % 4 == 0)
+            if (e.BarNumber % 4 == 0 && DetailsList.Items.Count > 0)
             {
                 SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
             }
@@ -218,6 +246,18 @@ namespace IntelligentDemo.Pages
             public string ImageUrl { get; set; }
             public string Emotion { get; set; }
             public string Text { get; set; }
+            public string Handle { get; set; }
+            public string Name { get; set; }
+
+            public string DisplayText
+            {
+                get
+                {
+                    return Text.Length > 50
+                        ? Text.Substring(0, 50) + "..."
+                        : Text;
+                }
+            }
         }
     }
 }
