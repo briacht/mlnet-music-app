@@ -1,4 +1,5 @@
 ﻿using IntelligentDemo.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Tweetinvi;
-using Tweetinvi.Events;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 
@@ -15,32 +15,40 @@ namespace IntelligentDemo.Pages
     /// <summary>
     /// Interaction logic for TwitterPage.xaml
     /// </summary>
-    public partial class TwitterPage : UserControl
+    public partial class TwitterPage : UserControl, IDisposable
     {
         private const string HASHTAG = "#happyface";
 
         private static readonly Dictionary<string, IEnumerable<NoteCommand>> _percussionLines = InitializePercussionLines();
         private EmotionService _emotionService = new EmotionService();
-        private SongController _controller;
-        private int? _currentIndex;
+        private SongController _songController;
+        private Task _streamTask;
         private int? _nextIndex;
+        bool processingAutoMove;
 
         public TwitterPage(SongController controller)
         {
-            Auth.SetUserCredentials(App.Secrets.Twitter.ConsumerKey, App.Secrets.Twitter.ConsumerSecret, App.Secrets.Twitter.UserAccessToken, App.Secrets.Twitter.UserAccessSecret);
-
             InitializeComponent();
-            TweetList.ItemsSource = Tweets;
-            _controller = controller;
-            controller.BarStarted += Controller_BarStarted;
+            _songController = controller;
         }
 
         public ObservableCollection<Tweet> Tweets = new ObservableCollection<Tweet>();
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            Auth.SetUserCredentials(App.Secrets.Twitter.ConsumerKey, App.Secrets.Twitter.ConsumerSecret, App.Secrets.Twitter.UserAccessToken, App.Secrets.Twitter.UserAccessSecret);
+
+            DetailsList.ItemsSource = Tweets;
+
             await LoadRecentTweets();
-            await ConnectToTwitterStream();
+            ConnectToTwitterStream();
+
+            if (Tweets.Any())
+            {
+                DetailsList.SelectedIndex = 0;
+            }
+
+            _songController.BarStarted += Controller_BarStarted;
         }
 
         private async Task LoadRecentTweets()
@@ -52,19 +60,19 @@ namespace IntelligentDemo.Pages
                 Filters = TweetSearchFilters.Images
             };
 
-            var search = Search.SearchTweets(searchParameter);
-            foreach (var tweet in search)
+            var search = Search.SearchTweets(HASHTAG);
+            foreach (var tweet in search.Take(20))
             {
                 await Process(tweet);
             }
         }
 
-        private async Task ConnectToTwitterStream()
+        private void ConnectToTwitterStream()
         {
             var stream = Stream.CreateFilteredStream();
             stream.AddTrack(HASHTAG);
             stream.MatchingTweetReceived += async (s, e) => await Process(e.Tweet);
-            await stream.StartStreamMatchingAllConditionsAsync();
+            _streamTask = stream.StartStreamMatchingAllConditionsAsync();
         }
 
         private async Task Process(ITweet tweet)
@@ -81,8 +89,22 @@ namespace IntelligentDemo.Pages
                     Text = tweet.Text
                 };
 
-                Current.Dispatcher.Invoke(() => Tweets.Add(result));
+                App.Current.Dispatcher.Invoke(() => Tweets.Add(result));
             }
+        }
+
+        private void DetailsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                DetailsList.ScrollIntoView(e.AddedItems[0]);
+
+                if (!processingAutoMove)
+                {
+                    SetNext((DetailsList.SelectedIndex));
+                }
+            }
+
         }
 
         private void Controller_BarStarted(object sender, BarStartedEventArgs e)
@@ -91,25 +113,31 @@ namespace IntelligentDemo.Pages
             {
                 if (_nextIndex != null)
                 {
-                    Current.DataContext = Tweets[_nextIndex.Value];
-                    _currentIndex = _nextIndex;
+                    processingAutoMove = true;
+                    DetailsList.SelectedIndex = _nextIndex.Value;
                     _nextIndex = null;
+                    processingAutoMove = false;
                 }
             }
 
             if (e.BarNumber % 4 == 0)
             {
-                var next = _currentIndex.HasValue ?
-                    Tweets.Skip(_currentIndex.Value + 1).Where(i => _percussionLines.ContainsKey(i.Emotion)).FirstOrDefault()
-                        ?? Tweets.Take(_currentIndex.Value).Where(i => _percussionLines.ContainsKey(i.Emotion)).FirstOrDefault()
-                        ?? Tweets.Where(i => _percussionLines.ContainsKey(i.Emotion)).FirstOrDefault()
-                    : Tweets.Where(i => _percussionLines.ContainsKey(i.Emotion)).FirstOrDefault();
+                SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
+            }
+        }
 
-                if (next != null)
-                {
-                    _nextIndex = Tweets.IndexOf(next);
-                    _controller.SetNextPercussionBar(_percussionLines[next.Emotion]);
-                }
+        private void SetNext(int index)
+        {
+            _nextIndex = index;
+
+            var next = Tweets[_nextIndex.Value];
+            if (_percussionLines.ContainsKey(next.Emotion))
+            {
+                _songController.SetNextPercussionBar(_percussionLines[next.Emotion]);
+            }
+            else
+            {
+                _songController.SetNextPercussionBar(_percussionLines.Values.ElementAt(_nextIndex.HasValue ? _nextIndex.Value % _percussionLines.Count : 0));
             }
         }
 
@@ -177,6 +205,11 @@ namespace IntelligentDemo.Pages
             };
 
             return result;
+        }
+
+        public void Dispose()
+        {
+            _streamTask?.Dispose();
         }
 
         public class Tweet

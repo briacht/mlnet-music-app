@@ -1,36 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO.Ports;
 using System.Windows.Media;
 
 namespace IntelligentDemo.Models
 {
     public class LightController
     {
-        //private SerialDevice _arduinoPort;
-        //private DataWriter _arduinoWriter;
+        private SerialPort _port;
 
-
-        //var aqs = SerialDevice.GetDeviceSelector();
-        //var dis = DeviceInformation.FindAllAsync(aqs).AsTask().Result;
-        //_arduinoPort = SerialDevice.FromIdAsync(dis[0].Id).AsTask().Result;
-        //_arduinoPort.BaudRate = 9600;
-        //_arduinoWriter = new DataWriter(_arduinoPort.OutputStream);
+        public LightController()
+        {
+            _port = new SerialPort("COM3", 9600);
+            _port.Open();
+            SetColor(Color.FromRgb(0, 0, 0));
+        }
 
         public void SetColor(Color color)
         {
             var msg = $"{color.R},{color.G},{color.B},";
-            //_arduinoWriter.WriteString(msg);
-            // await _arduinoWriter.StoreAsync();
+            _port.Write(msg);
         }
 
         public void Dispose()
         {
-            //SetColor(Color.FromRgb(0, 0, 0));
-            //_midi.Dispose();
-            //_arduinoPort.Dispose();
+            SetColor(Color.FromRgb(0, 0, 0));
+            _port.Close();
+            _port.Dispose();
         }
     }
 }

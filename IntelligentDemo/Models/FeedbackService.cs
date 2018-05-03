@@ -10,23 +10,14 @@ namespace IntelligentDemo.Models
 {
     public class FeedbackService
     {
-        private Feedback[] _feedback;
-
-        public FeedbackService()
+        public async Task<IEnumerable<Feedback>> GetFeedback()
         {
-            _feedback = JsonConvert.DeserializeObject<Feedback[]>(File.ReadAllText("Feedback.json"));
-            for (int i = 0; i < _feedback.Length; i++)
-            {
-                _feedback[i].Id = i.ToString();
-            }
+            var result = await LoadFeedback();
+            await AnalyzeFeedback(result);
+            return result;
         }
 
-        public IEnumerable<Feedback> GetFeedback()
-        {
-            return _feedback;
-        }
-
-        public async Task AnalyzeFeedback(IEnumerable<Feedback> feedback)
+        private async Task AnalyzeFeedback(IEnumerable<Feedback> feedback)
         {
             ITextAnalyticsAPI client = new TextAnalyticsAPI
             {
@@ -34,14 +25,27 @@ namespace IntelligentDemo.Models
                 SubscriptionKey = App.Secrets.SentimentKey
             };
 
-            var inputs = _feedback.Select(f => new MultiLanguageInput("en", f.Id, f.Text)).ToList();
+            var inputs = feedback.Select(f => new MultiLanguageInput("en", f.Id, f.Text)).ToList();
 
             var result = await client.SentimentAsync(new MultiLanguageBatchInput(inputs));
 
             foreach (var document in result.Documents)
             {
-                _feedback.Single(f => f.Id == document.Id).Score = document.Score;
+                feedback.Single(f => f.Id == document.Id).Score = document.Score;
             }
+        }
+
+        private async Task<IEnumerable<Feedback>> LoadFeedback()
+        {
+            var data = await Task.Run(() => File.ReadAllText("Feedback.json"));
+            var result = JsonConvert.DeserializeObject<Feedback[]>(data);
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i].Id = i.ToString();
+            }
+
+            return result;
         }
     }
 }

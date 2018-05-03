@@ -4,69 +4,53 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace IntelligentDemo.Pages
 {
     public partial class FeedbackPage : UserControl, IDisposable
     {
-        private LightController _lightController;
-        private Feedback[] _data;
-        private int _currentIndex;
+        private LightController _lightController = new LightController();
+        private FeedbackService _feedbackService = new FeedbackService();
+        private SongController _songController;
 
         public FeedbackPage(SongController controller)
         {
+            _songController = controller;
+
             InitializeComponent();
-
-            controller.BarStarted += (_, e) =>
-            {
-                if (e.BarNumber > 1 && e.BarNumber % 4 == 1)
-                {
-                    _currentIndex = (_currentIndex + 1) % _data.Length;
-                    Refresh();
-                }
-            };
-
-            _lightController = new LightController();
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var svc = new FeedbackService();
-            _data = svc.GetFeedback().ToArray();
+            var data = await _feedbackService.GetFeedback();
+            DetailsList.ItemsSource = data;
+            DetailsList.SelectedIndex = 0;
 
-            await svc.AnalyzeFeedback(_data);
-
-            Refresh();
+            _songController.BarStarted += SongController_BarStarted;
         }
 
-        private void Next_Click(object sender, RoutedEventArgs e)
+        private void SongController_BarStarted(object sender, BarStartedEventArgs e)
         {
-            if (_currentIndex < _data.Length - 1)
+            if (e.BarNumber > 1 && e.BarNumber % 4 == 1)
             {
-                _currentIndex++;
-                Refresh();
+                DetailsList.SelectedIndex = (DetailsList.SelectedIndex + 1) % DetailsList.Items.Count;
             }
-        }
-
-        private void Previous_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentIndex > 0)
-            {
-                _currentIndex--;
-                Refresh();
-            }
-        }
-
-        private void Refresh()
-        {
-            var item = _data[_currentIndex];
-            DataContext = item;
-            _lightController.SetColor(ScoreToColorConvertor.Convert(item.Score));
         }
 
         public void Dispose()
         {
             _lightController.Dispose();
+        }
+
+        private void DetailsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = e.AddedItems.Cast<Feedback>().FirstOrDefault();
+            if(item != null)
+            {
+                _lightController.SetColor(ScoreToColorConvertor.Convert(item.Score));
+                DetailsList.ScrollIntoView(item);
+            }
         }
     }
 }

@@ -28,13 +28,14 @@ namespace IntelligentDemo.Models
         private DispatcherTimer _timer;
         private List<Action<MidiWrapper>>[] _currentBar;
         private List<Action<MidiWrapper>>[] _carryOver;
+        private IEnumerable<NoteCommand> _nextMelodyBar;
         private IEnumerable<NoteCommand> _nextBassBar;
         private IEnumerable<NoteCommand> _nextPercussionBar;
 
         public SongController()
         {
             _midi = new MidiWrapper();
-            _midi.SelectInstrument(BASS_CHANNEL, 34);
+            _midi.SelectInstrument(BASS_CHANNEL, 39);
             _midi.SelectInstrument(MELODY_CHANNEL, 81);
 
             _carryOver = new List<Action<MidiWrapper>>[16];
@@ -45,6 +46,11 @@ namespace IntelligentDemo.Models
 
             _timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(125) /* 1/16 notes @ 120 bpm */ };
             _timer.Tick += (s, e) => OnSixteenthNotes();
+        }
+
+        public void SetBassProgram(byte program)
+        {
+            _midi.SelectInstrument(BASS_CHANNEL, program);
         }
 
         public event EventHandler<BarStartedEventArgs> BarStarted;
@@ -90,6 +96,23 @@ namespace IntelligentDemo.Models
                 }
             }
 
+            if (_nextMelodyBar != null)
+            {
+                foreach (var note in _nextMelodyBar)
+                {
+                    commands[note.Position - 1].Add(m => m.NoteOn(MELODY_CHANNEL, note.Note, note.Velocity));
+                    var off = (note.Position - 1) + note.Duration;
+                    if (off < 16)
+                    {
+                        commands[off].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, note.Velocity));
+                    }
+                    else
+                    {
+                        _carryOver[off - 16].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, note.Velocity));
+                    }
+                }
+            }
+
             if (_nextPercussionBar != null)
             {
                 foreach (var note in _nextPercussionBar)
@@ -106,6 +129,11 @@ namespace IntelligentDemo.Models
             commands[12].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
 
             return commands;
+        }
+
+        public void SetNextMelodyBar(IEnumerable<NoteCommand> notes)
+        {
+            _nextMelodyBar = notes;
         }
 
         public void SetNextBassBar(IEnumerable<NoteCommand> notes)

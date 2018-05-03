@@ -9,9 +9,9 @@
     <Grid>
         <DockPanel LastChildFill="True">
             <Grid DockPanel.Dock="Bottom" Height="50">
-                <StackPanel Orientation="Horizontal">
-                    <Button Click="Play_Click">Play</Button>
-                    <Button Click="Pause_Click">Pause</Button>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Button Name="PlayButton" Click="Play_Click">Play</Button>
+                    <Button Name="PauseButton" Click="Pause_Click" IsEnabled="False">Pause</Button>
                 </StackPanel>
             </Grid>
 

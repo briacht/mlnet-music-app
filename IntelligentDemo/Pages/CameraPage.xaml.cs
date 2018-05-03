@@ -17,56 +17,19 @@ namespace IntelligentDemo.Pages
     public partial class CameraPage : UserControl
     {
         private static readonly Dictionary<string, IEnumerable<NoteCommand>> _bassLines = InitializeBassLines();
-        private SongController _controller;
         private EmotionService _emotionService = new EmotionService();
-        private int? _currentIndex;
+        private SongController _songController;
         private int? _nextIndex;
+        bool processingAutoMove;
 
         public CameraPage(SongController controller)
         {
             InitializeComponent();
 
-            _controller = controller;
-            _controller.BarStarted += _controller_BarStarted;
-            DataContext = this;
+            _songController = controller;
         }
 
         public ObservableCollection<FeedbackViewModel> Images { get; set; } = new ObservableCollection<FeedbackViewModel>();
-
-        private void _controller_BarStarted(object sender, BarStartedEventArgs e)
-        {
-            if (e.BarNumber % 4 == 1)
-            {
-                if (_currentIndex != null)
-                {
-                    Images[_currentIndex.Value].Playing = false;
-                }
-
-                if (_nextIndex != null)
-                {
-                    Images[_nextIndex.Value].Playing = true;
-                    _currentIndex = _nextIndex;
-                    _nextIndex = null;
-                }
-
-
-            }
-
-            if (e.BarNumber % 4 == 0)
-            {
-                var next = _currentIndex.HasValue ?
-                    Images.Skip(_currentIndex.Value + 1).Where(i => _bassLines.ContainsKey(i.Emotion)).FirstOrDefault()
-                        ?? Images.Take(_currentIndex.Value).Where(i => _bassLines.ContainsKey(i.Emotion)).FirstOrDefault()
-                        ?? Images.Where(i => _bassLines.ContainsKey(i.Emotion)).FirstOrDefault()
-                    : Images.Where(i => _bassLines.ContainsKey(i.Emotion)).FirstOrDefault();
-
-                if (next != null)
-                {
-                    _nextIndex = Images.IndexOf(next);
-                    _controller.SetNextBassBar(_bassLines[next.Emotion]);
-                }
-            }
-        }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -74,6 +37,57 @@ namespace IntelligentDemo.Pages
             WebcamViewer.VideoDevice = cam;
             WebcamViewer.ImageDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "VideoCaptures");
             WebcamViewer.StartPreview();
+
+            DetailsList.ItemsSource = Images;
+
+            _songController.BarStarted += Controller_BarStarted;
+        }
+
+        private void Controller_BarStarted(object sender, BarStartedEventArgs e)
+        {
+            if (e.BarNumber % 4 == 1)
+            {
+                if (_nextIndex != null)
+                {
+                    processingAutoMove = true;
+                    DetailsList.SelectedIndex = _nextIndex.Value;
+                    _nextIndex = null;
+                    processingAutoMove = false;
+                }
+            }
+
+            if (e.BarNumber % 4 == 0 && Images.Any())
+            {
+                SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
+            }
+        }
+
+        private void SetNext(int index)
+        {
+            _nextIndex = index;
+
+            var next = Images[_nextIndex.Value];
+            if (_bassLines.ContainsKey(next.Emotion))
+            {
+                _songController.SetNextBassBar(_bassLines[next.Emotion]);
+            }
+            else
+            {
+                _songController.SetNextBassBar(_bassLines.Values.ElementAt(_nextIndex.HasValue ? _nextIndex.Value % _bassLines.Count : 0));
+            }
+        }
+
+        private void DetailsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                DetailsList.ScrollIntoView(e.AddedItems[0]);
+
+                if (!processingAutoMove)
+                {
+                    SetNext(DetailsList.Items.IndexOf(e.AddedItems[0]));
+                }
+            }
         }
 
         private async void Capture_Click(object sender, RoutedEventArgs e)
@@ -85,6 +99,12 @@ namespace IntelligentDemo.Pages
             var result = new FeedbackViewModel { Emotion = "Analyzing...", Image = bmp };
             result.Emotion = await _emotionService.DetectEmotionFromFile(path);
             Images.Add(result);
+
+            // If it was the first image, select it
+            if(Images.Count == 1)
+            {
+                DetailsList.SelectedIndex = 0;
+            }
         }
 
         private static string CropImage(string filePath)
@@ -169,16 +189,18 @@ namespace IntelligentDemo.Pages
 
             result["happiness"] = new List<NoteCommand>
             {
-                new NoteCommand{ Note = 48, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 50, Duration = 4, Velocity = 127, Position = 5},
-                new NoteCommand{ Note = 48, Duration = 4, Velocity = 127, Position = 9},
-                new NoteCommand{ Note = 50, Duration = 4, Velocity = 127, Position = 13},
+                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
+                new NoteCommand{ Note = 38, Duration = 2, Velocity = 127, Position = 5},
+                new NoteCommand{ Note = 38, Duration = 2, Velocity = 127, Position = 7},
+                new NoteCommand{ Note = 40, Duration = 4, Velocity = 127, Position = 9},
+                new NoteCommand{ Note = 38, Duration = 2, Velocity = 127, Position = 13},
+                new NoteCommand{ Note = 38, Duration = 2, Velocity = 127, Position = 15},
             };
 
             result["neutral"] = new List<NoteCommand>
             {
-                new NoteCommand{ Note = 48, Duration = 8, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 48, Duration = 8, Velocity = 127, Position = 9},
+                new NoteCommand{ Note = 36, Duration = 8, Velocity = 127, Position = 1},
+                new NoteCommand{ Note = 36, Duration = 8, Velocity = 127, Position = 9},
             };
 
             result["sadness"] = new List<NoteCommand>
@@ -189,9 +211,11 @@ namespace IntelligentDemo.Pages
 
             result["surprise"] = new List<NoteCommand>
             {
-                new NoteCommand{ Note = 38, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 38, Duration = 4, Velocity = 127, Position = 5},
-                new NoteCommand{ Note = 60, Duration = 8, Velocity = 127, Position = 9},
+                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
+                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 5},
+                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 9},
+                new NoteCommand{ Note = 38, Duration = 4, Velocity = 127, Position = 13},
+                new NoteCommand{ Note = 40, Duration = 4, Velocity = 127, Position = 15},
             };
 
             return result;

@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:IntelligentDemo.Pages"
              xmlns:convertors="clr-namespace:IntelligentDemo.Convertors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
@@ -15,33 +14,56 @@
     </UserControl.Resources>
 
     <Grid>
-        <StackPanel VerticalAlignment="Center">
-            <Border Width="400" Height="200" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
-                <Grid Margin="10">
-                    <DockPanel HorizontalAlignment="Stretch">
-                        <Grid HorizontalAlignment="Center" DockPanel.Dock="Bottom">
-                            <StackPanel>
-                                <TextBlock Text="{Binding Score,  StringFormat=Sentiment: {0:P0}}" HorizontalAlignment="Left" Margin="5,0,0,0"></TextBlock>
-                                <Border Height="30"  HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Width="350">
-                                    <Grid>
-                                        <Border Width="{Binding Score, Converter={StaticResource ScoreToWidthConvertor}}" CornerRadius="5" HorizontalAlignment="Left" Background="{Binding Score, Converter={StaticResource ScoreToColorConvertor}}">
-                                        </Border>
-                                    </Grid>
-                                </Border>
-                            </StackPanel>
-                        </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0" DataContext="{Binding ElementName=DetailsList, Path=SelectedItem}">
+            <Border MaxWidth="600" MaxHeight="400" Margin="20" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                <Grid Margin="10">
+                    <DockPanel>
+                        <Grid DockPanel.Dock="Bottom">
+                            <ProgressBar Minimum="0" Maximum="1" Value="{Binding Score}" Foreground="{Binding Score, Converter={StaticResource ScoreToColorConvertor}}" Height="30" />
+                        </Grid>
+                        <TextBlock DockPanel.Dock="Bottom" Text="{Binding Score,  StringFormat=Sentiment: {0:P0}}" FontSize="16px" HorizontalAlignment="Left"></TextBlock>
+                        
                         <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="16px" Text="{Binding Text}"></TextBlock>
                     </DockPanel>
                 </Grid>
             </Border>
+        </Grid>
 
-            <Grid>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Margin="10" Click="Previous_Click">&lt;</Button>
-                <Button Margin="10" Click="Next_Click">&gt;</Button>
-                </StackPanel>
-            </Grid>
-        </StackPanel>
+        <Grid Grid.Row="1">
+            <ListView Name="DetailsList" 
+                      HorizontalContentAlignment="Stretch" 
+                      VerticalContentAlignment="Stretch" 
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      SelectionChanged="DetailsList_SelectionChanged"
+                      SelectionMode="Single"
+                      Margin="10,0,10,10">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Border Margin="5" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                                <DockPanel Margin="5">
+                                    <Grid DockPanel.Dock="Bottom">
+                                        <ProgressBar  Minimum="0" Maximum="1" Value="{Binding Score}" Foreground="{Binding Score, Converter={StaticResource ScoreToColorConvertor}}" Height="15" />
+                                    </Grid>
+                                    <TextBlock DockPanel.Dock="Bottom" Text="{Binding Score,  StringFormat=Sentiment: {0:P0}}" FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding Text}"></TextBlock>
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate >
+                        <WrapPanel ItemHeight="200" ItemWidth="250" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Grid>
     </Grid>
 </UserControl>

@@ -195,6 +195,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\MusicPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SplitPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -211,6 +215,9 @@
     <Compile Include="Models\SongController.cs" />
     <Compile Include="Pages\FeedbackPage.xaml.cs">
       <DependentUpon>FeedbackPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MusicPage.xaml.cs">
+      <DependentUpon>MusicPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SplitPage.xaml.cs">
       <DependentUpon>SplitPage.xaml</DependentUpon>
