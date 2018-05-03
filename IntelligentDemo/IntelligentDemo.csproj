@@ -182,6 +182,7 @@
     </Compile>
     <Compile Include="Models\EmotionService.cs" />
     <Compile Include="Models\Feedback.cs" />
+    <Compile Include="Models\Music\BassLineGenerator.cs" />
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
@@ -211,8 +212,8 @@
   <ItemGroup>
     <Compile Include="Models\FeedbackService.cs" />
     <Compile Include="Models\LightController.cs" />
-    <Compile Include="Models\MidiInterface.cs" />
-    <Compile Include="Models\SongController.cs" />
+    <Compile Include="Models\Music\MidiInterface.cs" />
+    <Compile Include="Models\Music\SongController.cs" />
     <Compile Include="Pages\FeedbackPage.xaml.cs">
       <DependentUpon>FeedbackPage.xaml</DependentUpon>
     </Compile>

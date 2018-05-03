@@ -1,4 +1,5 @@
 ﻿using IntelligentDemo.Models;
+using IntelligentDemo.Models.Music;
 using IntelligentDemo.Pages;
 using System;
 using System.Windows;

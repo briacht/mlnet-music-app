@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Threading;
 
-namespace IntelligentDemo.Models
+namespace IntelligentDemo.Models.Music
 {
     public class NoteCommand
     {
@@ -31,11 +31,12 @@ namespace IntelligentDemo.Models
         private IEnumerable<NoteCommand> _nextMelodyBar;
         private IEnumerable<NoteCommand> _nextBassBar;
         private IEnumerable<NoteCommand> _nextPercussionBar;
+        private double _bassVolume = 1;
 
         public SongController()
         {
             _midi = new MidiWrapper();
-            _midi.SelectInstrument(BASS_CHANNEL, 39);
+            _midi.SelectInstrument(BASS_CHANNEL, 37);
             _midi.SelectInstrument(MELODY_CHANNEL, 81);
 
             _carryOver = new List<Action<MidiWrapper>>[16];
@@ -48,9 +49,11 @@ namespace IntelligentDemo.Models
             _timer.Tick += (s, e) => OnSixteenthNotes();
         }
 
-        public void SetBassProgram(byte program)
+        public void SetBassVolume(double volume)
         {
-            _midi.SelectInstrument(BASS_CHANNEL, program);
+            if (volume > 1 || volume < 0) throw new ArgumentException();
+
+            _bassVolume = volume;
         }
 
         public event EventHandler<BarStartedEventArgs> BarStarted;
@@ -83,15 +86,15 @@ namespace IntelligentDemo.Models
             {
                 foreach (var note in _nextBassBar)
                 {
-                    commands[note.Position - 1].Add(m => m.NoteOn(BASS_CHANNEL, note.Note, note.Velocity));
+                    commands[note.Position - 1].Add(m => m.NoteOn(BASS_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _bassVolume)));
                     var off = (note.Position - 1) + note.Duration;
                     if (off < 16)
                     {
-                        commands[off].Add(m => m.NoteOff(BASS_CHANNEL, note.Note, note.Velocity));
+                        commands[off].Add(m => m.NoteOff(BASS_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _bassVolume)));
                     }
                     else
                     {
-                        _carryOver[off - 16].Add(m => m.NoteOff(BASS_CHANNEL, note.Note, note.Velocity));
+                        _carryOver[off - 16].Add(m => m.NoteOff(BASS_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _bassVolume)));
                     }
                 }
             }

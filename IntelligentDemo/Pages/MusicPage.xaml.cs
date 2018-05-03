@@ -1,4 +1,5 @@
 ﻿using IntelligentDemo.Models;
+using IntelligentDemo.Models.Music;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,12 +30,12 @@ namespace IntelligentDemo.Pages
             {
                 var melody = new List<NoteCommand>
                 {
-                    new NoteCommand{ Note = 72, Duration = 4, Velocity = 70, Position = 1},
-                    new NoteCommand{ Note = 74, Duration = 2, Velocity = 70, Position = 5},
-                    new NoteCommand{ Note = 76, Duration = 2, Velocity = 70, Position = 7},
-                    new NoteCommand{ Note = 76, Duration = 4, Velocity = 70, Position = 9},
-                    new NoteCommand{ Note = 74, Duration = 2, Velocity = 70, Position = 13},
-                    new NoteCommand{ Note = 72, Duration = 2, Velocity = 70, Position = 15},
+                    new NoteCommand{ Note = 72, Duration = 4, Velocity = 20, Position = 1},
+                    new NoteCommand{ Note = 74, Duration = 2, Velocity = 20, Position = 5},
+                    new NoteCommand{ Note = 76, Duration = 2, Velocity = 20, Position = 7},
+                    new NoteCommand{ Note = 76, Duration = 4, Velocity = 20, Position = 9},
+                    new NoteCommand{ Note = 74, Duration = 2, Velocity = 20, Position = 13},
+                    new NoteCommand{ Note = 72, Duration = 2, Velocity = 20, Position = 15},
                 };
 
                 _songController.SetNextMelodyBar(melody);

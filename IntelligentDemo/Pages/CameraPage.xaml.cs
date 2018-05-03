@@ -1,7 +1,7 @@
 ﻿using IntelligentDemo.Models;
+using IntelligentDemo.Models.Music;
 using Microsoft.Expression.Encoder.Devices;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -16,11 +16,12 @@ namespace IntelligentDemo.Pages
 {
     public partial class CameraPage : UserControl
     {
-        private static readonly Dictionary<string, IEnumerable<NoteCommand>> _bassLines = InitializeBassLines();
+        private BassLineGenerator _bassLineGenerator = new BassLineGenerator();
         private EmotionService _emotionService = new EmotionService();
         private SongController _songController;
         private int? _nextIndex;
         bool processingAutoMove;
+        bool playing;
 
         public CameraPage(SongController controller)
         {
@@ -45,36 +46,31 @@ namespace IntelligentDemo.Pages
 
         private void Controller_BarStarted(object sender, BarStartedEventArgs e)
         {
-            if (e.BarNumber % 4 == 1)
+            if (playing)
             {
-                if (_nextIndex != null)
+                if (e.BarNumber % 4 == 1)
                 {
-                    processingAutoMove = true;
-                    DetailsList.SelectedIndex = _nextIndex.Value;
-                    _nextIndex = null;
-                    processingAutoMove = false;
+                    if (_nextIndex != null)
+                    {
+                        processingAutoMove = true;
+                        DetailsList.SelectedIndex = _nextIndex.Value;
+                        _nextIndex = null;
+                        processingAutoMove = false;
+                    }
                 }
-            }
 
-            if (e.BarNumber % 4 == 0 && Images.Any())
-            {
-                SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
+                if (e.BarNumber % 4 == 0 && Images.Any())
+                {
+                    SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
+                }
             }
         }
 
         private void SetNext(int index)
         {
             _nextIndex = index;
-
             var next = Images[_nextIndex.Value];
-            if (_bassLines.ContainsKey(next.Emotion))
-            {
-                _songController.SetNextBassBar(_bassLines[next.Emotion]);
-            }
-            else
-            {
-                _songController.SetNextBassBar(_bassLines.Values.ElementAt(_nextIndex.HasValue ? _nextIndex.Value % _bassLines.Count : 0));
-            }
+            _songController.SetNextBassBar(_bassLineGenerator.GetBassLine(next.Emotion, 127));
         }
 
         private void DetailsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -83,11 +79,36 @@ namespace IntelligentDemo.Pages
             {
                 DetailsList.ScrollIntoView(e.AddedItems[0]);
 
-                if (!processingAutoMove)
+                if (playing && !processingAutoMove)
                 {
                     SetNext(DetailsList.Items.IndexOf(e.AddedItems[0]));
                 }
             }
+        }
+
+        private void Play_Click(object sender, RoutedEventArgs e)
+        {
+            if (DetailsList.Items.Count > 0)
+            {
+                if(DetailsList.SelectedIndex < 0)
+                {
+                    DetailsList.SelectedIndex = 0;
+                }
+
+                SetNext(DetailsList.SelectedIndex);
+            }
+
+            playing = true;
+            PlayButton.IsEnabled = false;
+            PauseButton.IsEnabled = true;
+        }
+
+        private void Pause_Click(object sender, RoutedEventArgs e)
+        {
+            playing = false;
+            _songController.SetNextBassBar(Array.Empty<NoteCommand>());
+            PlayButton.IsEnabled = true;
+            PauseButton.IsEnabled = false;
         }
 
         private async void Capture_Click(object sender, RoutedEventArgs e)
@@ -101,7 +122,7 @@ namespace IntelligentDemo.Pages
             Images.Add(result);
 
             // If it was the first image, select it
-            if(Images.Count == 1)
+            if (Images.Count == 1)
             {
                 DetailsList.SelectedIndex = 0;
             }
@@ -151,74 +172,9 @@ namespace IntelligentDemo.Pages
             return path;
         }
 
-        private static Dictionary<string, IEnumerable<NoteCommand>> InitializeBassLines()
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            var result = new Dictionary<string, IEnumerable<NoteCommand>>();
-
-            result["anger"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 36, Duration = 16, Velocity = 127, Position = 1},
-            };
-
-            result["contempt"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 100, Position = 5},
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 9},
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 100, Position = 13},
-            };
-
-            result["disgust"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 40, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 38, Duration = 4, Velocity = 127, Position = 5},
-                new NoteCommand{ Note = 36, Duration = 8, Velocity = 127, Position = 9},
-            };
-
-            result["fear"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 1},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 3},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 5},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 7},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 9},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 11},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 13},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 15},
-            };
-
-            result["happiness"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 38, Duration = 2, Velocity = 127, Position = 5},
-                new NoteCommand{ Note = 38, Duration = 2, Velocity = 127, Position = 7},
-                new NoteCommand{ Note = 40, Duration = 4, Velocity = 127, Position = 9},
-                new NoteCommand{ Note = 38, Duration = 2, Velocity = 127, Position = 13},
-                new NoteCommand{ Note = 38, Duration = 2, Velocity = 127, Position = 15},
-            };
-
-            result["neutral"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 36, Duration = 8, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 36, Duration = 8, Velocity = 127, Position = 9},
-            };
-
-            result["sadness"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 38, Duration = 8, Velocity = 100, Position = 1},
-                new NoteCommand{ Note = 36, Duration = 8, Velocity = 100, Position = 9},
-            };
-
-            result["surprise"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 5},
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 9},
-                new NoteCommand{ Note = 38, Duration = 4, Velocity = 127, Position = 13},
-                new NoteCommand{ Note = 40, Duration = 4, Velocity = 127, Position = 15},
-            };
-
-            return result;
+            _songController?.SetBassVolume(e.NewValue);
         }
 
         public class FeedbackViewModel : INotifyPropertyChanged

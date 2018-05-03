@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace IntelligentDemo.Models
+namespace IntelligentDemo.Models.Music
 {
     public class MidiWrapper : IDisposable
     {
