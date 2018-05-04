@@ -2,7 +2,6 @@
 using IntelligentDemo.Models;
 using IntelligentDemo.Models.Music;
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,6 +13,8 @@ namespace IntelligentDemo.Pages
         private LightController _lightController = new LightController();
         private FeedbackService _feedbackService = new FeedbackService();
         private SongController _songController;
+        bool playing;
+        bool enabled;
 
         public FeedbackPage(SongController controller)
         {
@@ -33,9 +34,12 @@ namespace IntelligentDemo.Pages
 
         private void SongController_BarStarted(object sender, BarStartedEventArgs e)
         {
-            if (e.BarNumber > 1 && e.BarNumber % 4 == 1)
+            if (playing)
             {
-                DetailsList.SelectedIndex = (DetailsList.SelectedIndex + 1) % DetailsList.Items.Count;
+                if (e.BarNumber > 1 && e.BarNumber % 4 == 1)
+                {
+                    DetailsList.SelectedIndex = (DetailsList.SelectedIndex + 1) % DetailsList.Items.Count;
+                }
             }
         }
 
@@ -46,8 +50,60 @@ namespace IntelligentDemo.Pages
 
         private void DetailsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var item = e.AddedItems.Cast<Feedback>().FirstOrDefault();
-            if(item != null)
+            if (enabled)
+            {
+                SetColorForCurrent();
+            }
+        }
+
+        private void Play_Click(object sender, RoutedEventArgs e)
+        {
+            if (!playing)
+            {
+                if (DetailsList.Items.Count > 0)
+                {
+                    if (DetailsList.SelectedIndex < 0)
+                    {
+                        DetailsList.SelectedIndex = 0;
+                    }
+
+                    if (enabled)
+                    {
+                        SetColorForCurrent();
+                    }
+                }
+
+                playing = true;
+                PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10));
+                _songController.Start();
+            }
+            else
+            {
+                playing = false;
+                PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
+            }
+        }
+
+        private void Enable_Click(object sender, RoutedEventArgs e)
+        {
+            if(!enabled)
+            {
+                enabled = true;
+                EnableButton.Background = new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10));
+                SetColorForCurrent();
+            }
+            else
+            {
+                enabled = false;
+                EnableButton.Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
+                _lightController.SetColor(Colors.Black);
+            }
+        }
+
+        private void SetColorForCurrent()
+        {
+            var item = (Feedback)DetailsList.SelectedItem;
+            if (item != null)
             {
                 _lightController.SetColor(ScoreToColorConvertor.Convert(item.Score));
                 DetailsList.ScrollIntoView(item);

@@ -17,6 +17,8 @@ namespace IntelligentDemo.Pages
 {
     public partial class CameraPage : UserControl
     {
+        private const double DEFAULT_VOLUME = 0.5;
+
         private BassLineGenerator _bassLineGenerator = new BassLineGenerator();
         private EmotionService _emotionService = new EmotionService();
         private SongController _songController;
@@ -41,6 +43,7 @@ namespace IntelligentDemo.Pages
             WebcamViewer.StartPreview();
 
             DetailsList.ItemsSource = Images;
+            VolumeSlider.Value = DEFAULT_VOLUME * 100;
 
             _songController.BarStarted += Controller_BarStarted;
         }
@@ -103,6 +106,8 @@ namespace IntelligentDemo.Pages
 
                 playing = true;
                 PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10));
+
+                _songController.Start();
             }
             else
             {

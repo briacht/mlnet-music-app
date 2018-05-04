@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:IntelligentDemo.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Name="MainGrid">
+    <Grid Name="MainGrid" Background="#333333">
             
     </Grid>
 </UserControl>

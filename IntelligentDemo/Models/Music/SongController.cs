@@ -32,6 +32,8 @@ namespace IntelligentDemo.Models.Music
         private IEnumerable<NoteCommand> _nextBassBar;
         private IEnumerable<NoteCommand> _nextPercussionBar;
         private double _bassVolume = 1;
+        private double _percussionVolume = 1;
+        private double _melodyVolume = 1;
 
         public SongController()
         {
@@ -54,6 +56,20 @@ namespace IntelligentDemo.Models.Music
             if (volume > 1 || volume < 0) throw new ArgumentException();
 
             _bassVolume = volume;
+        }
+
+        public void SetPercussionVolume(double volume)
+        {
+            if (volume > 1 || volume < 0) throw new ArgumentException();
+
+            _percussionVolume = volume;
+        }
+
+        public void SetMelodyVolume(double volume)
+        {
+            if (volume > 1 || volume < 0) throw new ArgumentException();
+
+            _melodyVolume = volume;
         }
 
         public event EventHandler<BarStartedEventArgs> BarStarted;
@@ -103,15 +119,15 @@ namespace IntelligentDemo.Models.Music
             {
                 foreach (var note in _nextMelodyBar)
                 {
-                    commands[note.Position - 1].Add(m => m.NoteOn(MELODY_CHANNEL, note.Note, note.Velocity));
+                    commands[note.Position - 1].Add(m => m.NoteOn(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
                     var off = (note.Position - 1) + note.Duration;
                     if (off < 16)
                     {
-                        commands[off].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, note.Velocity));
+                        commands[off].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
                     }
                     else
                     {
-                        _carryOver[off - 16].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, note.Velocity));
+                        _carryOver[off - 16].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
                     }
                 }
             }
@@ -121,7 +137,7 @@ namespace IntelligentDemo.Models.Music
                 foreach (var note in _nextPercussionBar)
                 {
                     // Off commands not needed for percussion
-                    commands[note.Position - 1].Add(m => m.NoteOn(PERCUSSION_CHANNEL, note.Note, note.Velocity));
+                    commands[note.Position - 1].Add(m => m.NoteOn(PERCUSSION_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _percussionVolume)));
                 }
             }
 

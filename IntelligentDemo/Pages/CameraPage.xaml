@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <convertors:RatioConverter x:Key="ItemWidthConverter" MaxValue="250" />
         <convertors:RatioConverter x:Key="ItemHeightConverter" MaxValue="250" />
+        <convertors:RatioConverter x:Key="CamHeightConvertor" MaxValue="600" />
         <convertors:VisibleWhenNullConvertor x:Key="VisibleWhenNullConvertor" />
         <convertors:VisibleWhenZeroConvertor x:Key="VisibleWhenZeroConvertor" />
         <convertors:HiddenWhenZeroConvertor x:Key="HiddenWhenZeroConvertor" />
@@ -34,10 +35,9 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-
                     <Button Grid.Row="0" Width="40" Height="40" Margin="5,10,5,5" Name="PlayButton" Click="Play_Click" Background="#666666" Foreground="White">Play</Button>
                     <StackPanel Grid.Row="1">
-                        <Slider Height="200" HorizontalAlignment="Center" Margin="0,10,0,0"  Orientation="Vertical" VerticalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="100" Minimum="0" Value="75"  />
+                        <Slider Name="VolumeSlider" Height="200" HorizontalAlignment="Center" Margin="0,10,0,0"  Orientation="Vertical" VerticalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="100" Minimum="0"  />
                         <TextBlock Grid.Row="2" HorizontalAlignment="Center">Volume</TextBlock>
                     </StackPanel>
                 </Grid>
@@ -45,11 +45,10 @@
         </Grid>
 
         <Grid Margin="10,10,0,10" Grid.Column="0" Name="CaptureControls">
-            <Border BorderBrush="Black" Background="Black" BorderThickness="1" CornerRadius="5">
+            <Border BorderBrush="Black" Background="#c8c8c8" BorderThickness="1" CornerRadius="5">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1000*" MaxHeight="600" />
+                        <RowDefinition  />
                         <RowDefinition Height="60" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -58,9 +57,19 @@
                         <ColumnDefinition Width="70" />
                     </Grid.ColumnDefinitions>
 
-                    <cam:Webcam Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="10" Padding="0" x:Name="WebcamViewer" FrameRate="30" />
-                    <Ellipse  Grid.Column="2" Grid.Row="2" x:Name="CaptureLight" HorizontalAlignment="Right" VerticalAlignment="Bottom" Fill="Red" Margin="0,0,10,10" Width="50" Height="50" />
-                    <Button Name="CaptureButton" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,15" Click="Capture_Click" Width="40" Height="40">X</Button>
+                    <cam:Webcam Grid.Row="0" 
+                                Grid.Column="0" 
+                                Grid.ColumnSpan="3" 
+                                Margin="10" 
+                                Padding="0"  
+                                FrameRate="30"
+                                VerticalAlignment="Bottom"
+                                Width="{Binding ElementName=CaptureControls, Path=ActualWidth, Converter={StaticResource CamHeightConvertor}, ConverterParameter=0.9}" 
+                                Height="{Binding ElementName=WebcamViewer, Path=ActualWidth, Converter={StaticResource CamHeightConvertor}, ConverterParameter=0.75}" 
+                                Name="WebcamViewer" />
+                    
+                    <Ellipse Visibility="Hidden" Grid.Column="2" Grid.Row="1" x:Name="CaptureLight" HorizontalAlignment="Right" VerticalAlignment="Bottom" Fill="Red" Margin="0,0,10,10" Width="50" Height="50" />
+                    <Button Name="CaptureButton" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,15" Click="Capture_Click" Width="40" Height="40">X</Button>
                 </Grid>
             </Border>
         </Grid>
@@ -72,7 +81,7 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" DataContext="{Binding ElementName=DetailsList, Path=SelectedItem}" Name="DetailGrid">
-                <Border MaxWidth="600" MaxHeight="400" Margin="50,10,50,0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Background="#f0f0f0">
+                <Border MaxWidth="600" MaxHeight="400" Margin="50,10,50,0" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
                     <Grid Margin="10">
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16px" Visibility="{Binding ElementName=DetailGrid, Path=DataContext, Converter={StaticResource VisibleWhenNullConvertor}}">Select an image to preview</TextBlock>
                         <DockPanel>
@@ -102,7 +111,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Border Margin="5" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Background="#f0f0f0">
+                                    <Border Margin="5" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
                                         <DockPanel Margin="5">
                                             <Grid DockPanel.Dock="Bottom" Margin="0,5,0,0" >
                                                 <TextBlock FontWeight="Bold" Text="{Binding Emotion}"/>

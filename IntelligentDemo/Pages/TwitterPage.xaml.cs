@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -18,6 +19,7 @@ namespace IntelligentDemo.Pages
     /// </summary>
     public partial class TwitterPage : UserControl, IDisposable
     {
+        private const double DEFAULT_VOLUME = 0.75;
         private const string HASHTAG = "#mldemotest";
 
         private static readonly Dictionary<string, IEnumerable<NoteCommand>> _percussionLines = InitializePercussionLines();
@@ -26,6 +28,7 @@ namespace IntelligentDemo.Pages
         private Task _streamTask;
         private int? _nextIndex;
         bool processingAutoMove;
+        bool playing;
 
         public TwitterPage(SongController controller)
         {
@@ -40,6 +43,7 @@ namespace IntelligentDemo.Pages
             Auth.SetUserCredentials(App.Secrets.Twitter.ConsumerKey, App.Secrets.Twitter.ConsumerSecret, App.Secrets.Twitter.UserAccessToken, App.Secrets.Twitter.UserAccessSecret);
 
             DetailsList.ItemsSource = Tweets;
+            VolumeSlider.Value = DEFAULT_VOLUME * 100;
 
             LoadTestTweets();
             await LoadRecentTweets();
@@ -128,7 +132,7 @@ namespace IntelligentDemo.Pages
             {
                 DetailsList.ScrollIntoView(e.AddedItems[0]);
 
-                if (!processingAutoMove)
+                if (playing && !processingAutoMove)
                 {
                     SetNext((DetailsList.SelectedIndex));
                 }
@@ -138,20 +142,23 @@ namespace IntelligentDemo.Pages
 
         private void Controller_BarStarted(object sender, BarStartedEventArgs e)
         {
-            if (e.BarNumber % 4 == 1)
+            if (playing)
             {
-                if (_nextIndex != null)
+                if (e.BarNumber % 4 == 1)
                 {
-                    processingAutoMove = true;
-                    DetailsList.SelectedIndex = _nextIndex.Value;
-                    _nextIndex = null;
-                    processingAutoMove = false;
+                    if (_nextIndex != null)
+                    {
+                        processingAutoMove = true;
+                        DetailsList.SelectedIndex = _nextIndex.Value;
+                        _nextIndex = null;
+                        processingAutoMove = false;
+                    }
                 }
-            }
 
-            if (e.BarNumber % 4 == 0 && DetailsList.Items.Count > 0)
-            {
-                SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
+                if (e.BarNumber % 4 == 0 && DetailsList.Items.Count > 0)
+                {
+                    SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
+                }
             }
         }
 
@@ -167,6 +174,38 @@ namespace IntelligentDemo.Pages
             else
             {
                 _songController.SetNextPercussionBar(_percussionLines.Values.ElementAt(_nextIndex.HasValue ? _nextIndex.Value % _percussionLines.Count : 0));
+            }
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _songController?.SetPercussionVolume(e.NewValue / 100);
+        }
+
+        private void Play_Click(object sender, RoutedEventArgs e)
+        {
+            if (!playing)
+            {
+                if (DetailsList.Items.Count > 0)
+                {
+                    if (DetailsList.SelectedIndex < 0)
+                    {
+                        DetailsList.SelectedIndex = 0;
+                    }
+
+                    SetNext(DetailsList.SelectedIndex);
+                }
+
+                playing = true;
+                PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10));
+
+                _songController.Start();
+            }
+            else
+            {
+                playing = false;
+                _songController.SetNextPercussionBar(Array.Empty<NoteCommand>());
+                PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
             }
         }
 

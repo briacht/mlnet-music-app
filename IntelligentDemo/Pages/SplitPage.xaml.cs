@@ -23,6 +23,7 @@ namespace IntelligentDemo.Pages
             var rows = a.Length / 2 + a.Length % 2;
 
             var brush = new SolidColorBrush(Colors.Black);
+            var background = new SolidColorBrush(Colors.White);
             var thickness = new Thickness(1);
             var radius = new CornerRadius(10);
             var margin = new Thickness(10);
@@ -31,7 +32,7 @@ namespace IntelligentDemo.Pages
             {
                 MainGrid.RowDefinitions.Add(new RowDefinition());
 
-                var left = new Border { BorderBrush = brush, BorderThickness = thickness, CornerRadius = radius, Margin = margin };
+                var left = new Border { BorderBrush = brush, BorderThickness = thickness, CornerRadius = radius, Margin = margin, Background = background };
                 left.Child = new ContentControl { Content = a[i * 2] };
                 left.SetValue(Grid.RowProperty, i);
                 left.SetValue(Grid.ColumnProperty, 0);
@@ -39,7 +40,7 @@ namespace IntelligentDemo.Pages
 
                 if (i * 2 + 1 < a.Length)
                 {
-                    var right = new Border { BorderBrush = brush, BorderThickness = thickness, CornerRadius = radius, Margin = margin };
+                    var right = new Border { BorderBrush = brush, BorderThickness = thickness, CornerRadius = radius, Margin = margin, Background = background };
                     right.Child = new ContentControl { Content = a[i * 2 + 1] };
                     right.SetValue(Grid.RowProperty, i);
                     right.SetValue(Grid.ColumnProperty, 1);
