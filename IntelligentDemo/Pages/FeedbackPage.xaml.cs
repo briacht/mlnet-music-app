@@ -15,6 +15,7 @@ namespace IntelligentDemo.Pages
         private SongController _songController;
         bool playing;
         bool enabled;
+        bool initialized;
 
         public FeedbackPage(SongController controller)
         {
@@ -25,11 +26,15 @@ namespace IntelligentDemo.Pages
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var data = await _feedbackService.GetFeedback();
-            DetailsList.ItemsSource = data;
-            DetailsList.SelectedIndex = 0;
+            if (!initialized)
+            {
+                initialized = true;
+                var data = await _feedbackService.GetFeedback();
+                DetailsList.ItemsSource = data;
+                DetailsList.SelectedIndex = 0;
 
-            _songController.BarStarted += SongController_BarStarted;
+                _songController.BarStarted += SongController_BarStarted;
+            }
         }
 
         private void SongController_BarStarted(object sender, BarStartedEventArgs e)

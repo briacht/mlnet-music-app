@@ -25,6 +25,7 @@ namespace IntelligentDemo.Pages
         private int? _nextIndex;
         bool processingAutoMove;
         bool playing;
+        bool initialized;
 
         public CameraPage(SongController controller)
         {
@@ -37,15 +38,20 @@ namespace IntelligentDemo.Pages
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var cam = EncoderDevices.FindDevices(EncoderDeviceType.Video).Last();
-            WebcamViewer.VideoDevice = cam;
-            WebcamViewer.ImageDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "VideoCaptures");
-            WebcamViewer.StartPreview();
+           if(!initialized)
+            {
+                initialized = true;
 
-            DetailsList.ItemsSource = Images;
-            VolumeSlider.Value = DEFAULT_VOLUME * 100;
+                var cam = EncoderDevices.FindDevices(EncoderDeviceType.Video).Last();
+                WebcamViewer.VideoDevice = cam;
+                WebcamViewer.ImageDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "VideoCaptures");
+                WebcamViewer.StartPreview();
 
-            _songController.BarStarted += Controller_BarStarted;
+                DetailsList.ItemsSource = Images;
+                VolumeSlider.Value = DEFAULT_VOLUME * 100;
+
+                _songController.BarStarted += Controller_BarStarted;
+            }
         }
 
         private void Controller_BarStarted(object sender, BarStartedEventArgs e)

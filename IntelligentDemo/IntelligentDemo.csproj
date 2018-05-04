@@ -209,10 +209,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SplitPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\TwitterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -228,9 +224,6 @@
     </Compile>
     <Compile Include="Pages\MusicPage.xaml.cs">
       <DependentUpon>MusicPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\SplitPage.xaml.cs">
-      <DependentUpon>SplitPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TwitterPage.xaml.cs">
       <DependentUpon>TwitterPage.xaml</DependentUpon>

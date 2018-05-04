@@ -29,6 +29,7 @@ namespace IntelligentDemo.Pages
         private int? _nextIndex;
         bool processingAutoMove;
         bool playing;
+        bool initialized;
 
         public TwitterPage(SongController controller)
         {
@@ -40,21 +41,25 @@ namespace IntelligentDemo.Pages
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            Auth.SetUserCredentials(App.Secrets.Twitter.ConsumerKey, App.Secrets.Twitter.ConsumerSecret, App.Secrets.Twitter.UserAccessToken, App.Secrets.Twitter.UserAccessSecret);
-
-            DetailsList.ItemsSource = Tweets;
-            VolumeSlider.Value = DEFAULT_VOLUME * 100;
-
-            LoadTestTweets();
-            await LoadRecentTweets();
-            ConnectToTwitterStream();
-
-            if (Tweets.Any())
+            if (!initialized)
             {
-                DetailsList.SelectedIndex = 0;
-            }
+                initialized = true;
+                Auth.SetUserCredentials(App.Secrets.Twitter.ConsumerKey, App.Secrets.Twitter.ConsumerSecret, App.Secrets.Twitter.UserAccessToken, App.Secrets.Twitter.UserAccessSecret);
 
-            _songController.BarStarted += Controller_BarStarted;
+                DetailsList.ItemsSource = Tweets;
+                VolumeSlider.Value = DEFAULT_VOLUME * 100;
+
+                LoadTestTweets();
+                await LoadRecentTweets();
+                ConnectToTwitterStream();
+
+                if (Tweets.Any())
+                {
+                    DetailsList.SelectedIndex = 0;
+                }
+
+                _songController.BarStarted += Controller_BarStarted;
+            }
         }
 
         private async Task LoadRecentTweets()

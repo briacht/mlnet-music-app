@@ -17,6 +17,7 @@ namespace IntelligentDemo.Pages
 
         private SongController _songController;
         private MelodyService _melodyService = new MelodyService();
+        bool initialized;
 
         bool playing;
 
@@ -28,16 +29,18 @@ namespace IntelligentDemo.Pages
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            VolumeSlider.Value = DEFAULT_VOLUME * 100;
+            if (!initialized)
+            {
+                initialized = true;
+                VolumeSlider.Value = DEFAULT_VOLUME * 100;
 
-            var data = _melodyService.LoadSong();
-            FixMissingNotes(data[0]);
-            ShowMeasure(data[0]);
-            _songController.SetNextMelodyBar(data[0]);
-    
-            _songController.BarStarted += _songController_BarStarted;
+                var data = _melodyService.LoadSong();
+                FixMissingNotes(data[0]);
+                ShowMeasure(data[0]);
+                _songController.SetNextMelodyBar(data[0]);
 
-
+                _songController.BarStarted += _songController_BarStarted;
+            }
         }
 
         private List<NoteCommand> _fixedNotes = new List<NoteCommand>();
