@@ -1,7 +1,10 @@
 ﻿using IntelligentDemo.Models;
 using IntelligentDemo.Models.Music;
+using PSAMControlLibrary;
+using PSAMWPFControlLibrary;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -13,16 +16,9 @@ namespace IntelligentDemo.Pages
         private const double DEFAULT_VOLUME = 0.5;
 
         private SongController _songController;
+        private MelodyService _melodyService = new MelodyService();
+
         bool playing;
-        private List<NoteCommand> _melody = new List<NoteCommand>
-                    {
-                        new NoteCommand{ Note = 72, Duration = 4, Velocity = 127, Position = 1},
-                        new NoteCommand{ Note = 74, Duration = 2, Velocity = 127, Position = 5},
-                        new NoteCommand{ Note = 76, Duration = 2, Velocity = 127, Position = 7},
-                        new NoteCommand{ Note = 76, Duration = 4, Velocity = 127, Position = 9},
-                        new NoteCommand{ Note = 74, Duration = 2, Velocity = 127, Position = 13},
-                        new NoteCommand{ Note = 72, Duration = 2, Velocity = 127, Position = 15},
-                    };
 
         public MusicPage(SongController controller)
         {
@@ -34,7 +30,95 @@ namespace IntelligentDemo.Pages
         {
             VolumeSlider.Value = DEFAULT_VOLUME * 100;
 
+            var data = _melodyService.LoadSong();
+            FixMissingNotes(data[0]);
+            ShowMeasure(data[0]);
+            _songController.SetNextMelodyBar(data[0]);
+    
             _songController.BarStarted += _songController_BarStarted;
+
+
+        }
+
+        private List<NoteCommand> _fixedNotes = new List<NoteCommand>();
+
+        private void FixMissingNotes(List<NoteCommand> measure)
+        {
+            foreach (var note in measure.Where(n => n.Note == 0))
+            {
+                note.Note = 48;
+                _fixedNotes.Add(note);
+            }
+        }
+
+        private void ShowMeasure(List<NoteCommand> notes)
+        {
+            var s = new List<MusicalSymbol>();
+            foreach (var note in notes.OrderBy(n => n.Position))
+            {
+                var t = TranslateNote(note);
+                var psamNote = new Note(t.Note, t.Alter, t.Octave, TranslateDuration(note), NoteStemDirection.Down, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Single });
+                if(_fixedNotes.Contains(note))
+                {
+                    psamNote.MusicalCharacterColor = System.Drawing.Color.Red;
+                }
+                s.Add(psamNote);
+            }
+
+            viewer.Symbols = s;
+        }
+
+        private (string Note, int Alter, int Octave) TranslateNote(NoteCommand note)
+        {
+            var octave = note.Note / 12 - 1;
+            switch (note.Note % 12)
+            {
+                case 0:
+                    return ("C", 0, octave);
+                case 1:
+                    return ("C", 1, octave);
+                case 2:
+                    return ("D", 0, octave);
+                case 3:
+                    return ("D", 1, octave);
+                case 4:
+                    return ("E", 0, octave);
+                case 5:
+                    return ("F", 0, octave);
+                case 6:
+                    return ("F", 1, octave);
+                case 7:
+                    return ("G", 0, octave);
+                case 8:
+                    return ("G", 1, octave);
+                case 9:
+                    return ("A", 0, octave);
+                case 10:
+                    return ("A", 1, octave);
+                case 11:
+                    return ("B", 0, octave);
+                default:
+                    throw new Exception("Unreachable code!");
+            }
+        }
+
+        private MusicalSymbolDuration TranslateDuration(NoteCommand note)
+        {
+            switch (note.Duration)
+            {
+                case 1:
+                    return MusicalSymbolDuration.Sixteenth;
+                case 2:
+                    return MusicalSymbolDuration.Eighth;
+                case 4:
+                    return MusicalSymbolDuration.Quarter;
+                case 8:
+                    return MusicalSymbolDuration.Half;
+                case 16:
+                    return MusicalSymbolDuration.Whole;
+                default:
+                    throw new ArgumentException($"Don't know how to translate {note.Duration}/16ths of a note.");
+            }
         }
 
         private void _songController_BarStarted(object sender, BarStartedEventArgs e)
@@ -45,7 +129,7 @@ namespace IntelligentDemo.Pages
                 {
                     
 
-                    _songController.SetNextMelodyBar(_melody);
+                    //_songController.SetNextMelodyBar(_melody);
                 }
             }
         }
@@ -68,7 +152,7 @@ namespace IntelligentDemo.Pages
 
                 //    SetNext(DetailsList.SelectedIndex);
                 //}
-                _songController.SetNextMelodyBar(_melody);
+                // _songController.SetNextMelodyBar(_melody);
 
                 playing = true;
                 PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10));

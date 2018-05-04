@@ -82,6 +82,10 @@
     <Reference Include="Nito.Disposables, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7247f14397bf67b9, processorArchitecture=MSIL">
       <HintPath>..\packages\NitoAsyncEx.Context.StrongName.1.1.0\lib\net461\Nito.Disposables.dll</HintPath>
     </Reference>
+    <Reference Include="PSAMControlLibrary, Version=2.1.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\PSAMWPFControlLibrary\PSAMControlLibrary\PSAMControlLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -187,6 +191,7 @@
     <Compile Include="Models\EmotionService.cs" />
     <Compile Include="Models\Feedback.cs" />
     <Compile Include="Models\Music\BassLineGenerator.cs" />
+    <Compile Include="Models\Music\MelodyService.cs" />
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
@@ -261,6 +266,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PSAMWPFControlLibrary\PSAMWPFControlLibrary.csproj">
+      <Project>{24e32e85-6a86-4146-b877-30b422958874}</Project>
+      <Name>PSAMWPFControlLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

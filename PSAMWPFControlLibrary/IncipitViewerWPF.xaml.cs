@@ -817,10 +817,11 @@ namespace PSAMWPFControlLibrary
                         if (note.HasNatural == true) currentXPosition += 9;
 
                         //Draw a note / Rysuj nutę:
+                        var brush = new SolidColorBrush(Color.FromRgb(note.MusicalCharacterColor.R, note.MusicalCharacterColor.G, note.MusicalCharacterColor.B));
                         if (!note.IsGraceNote)
-                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, Brushes.Black, currentXPosition + 3.5f, notePositionY, 27.0f);
+                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, brush, currentXPosition + 3.5f, notePositionY, 27.0f);
                         else
-                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.GraceNoteFont, textBrush, currentXPosition + 5.5f,
+                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.GraceNoteFont, brush, currentXPosition + 5.5f,
                                 notePositionY + 2, 24.5f);
                         lastXPosition = currentXPosition;
                         note.Location = new System.Drawing.PointF(currentXPosition, notePositionY);
