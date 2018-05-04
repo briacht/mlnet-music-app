@@ -1,5 +1,5 @@
 ﻿using IntelligentDemo.Models;
-using IntelligentDemo.Models.Music;
+using IntelligentDemo.Services;
 using Microsoft.Expression.Encoder.Devices;
 using System;
 using System.Collections.ObjectModel;

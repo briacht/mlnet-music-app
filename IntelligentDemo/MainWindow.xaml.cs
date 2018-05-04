@@ -1,6 +1,5 @@
-﻿using IntelligentDemo.Models;
-using IntelligentDemo.Models.Music;
-using IntelligentDemo.Pages;
+﻿using IntelligentDemo.Pages;
+using IntelligentDemo.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows;

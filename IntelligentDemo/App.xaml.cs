@@ -32,8 +32,8 @@ namespace IntelligentDemo
             return JsonConvert.DeserializeObject<Secrets>(File.ReadAllText("secrets.json"));
         }
 
-        public string EmotionKey { get; set; }
-        public string SentimentKey { get; set; }
+        public string FaceApiKey { get; set; }
+        public string TextAnalyticsKey { get; set; }
         public Twitter Twitter { get; set; }
     }
 

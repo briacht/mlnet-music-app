@@ -1,7 +1,7 @@
 ﻿using IntelligentDemo.Models;
-using IntelligentDemo.Models.Music;
+using IntelligentDemo.Models.Services;
+using IntelligentDemo.Services;
 using PSAMControlLibrary;
-using PSAMWPFControlLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;

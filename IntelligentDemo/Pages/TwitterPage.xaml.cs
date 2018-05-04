@@ -1,5 +1,5 @@
 ﻿using IntelligentDemo.Models;
-using IntelligentDemo.Models.Music;
+using IntelligentDemo.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

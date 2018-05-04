@@ -1,7 +1,7 @@
 ﻿using System.IO.Ports;
 using System.Windows.Media;
 
-namespace IntelligentDemo.Models
+namespace IntelligentDemo.Services
 {
     public class LightController
     {

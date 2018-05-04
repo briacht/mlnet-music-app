@@ -1,16 +1,11 @@
-﻿using System;
+﻿using IntelligentDemo.Models;
+using System;
 using System.Collections.Generic;
 using System.Windows.Threading;
 
-namespace IntelligentDemo.Models.Music
+namespace IntelligentDemo.Services
 {
-    public class NoteCommand
-    {
-        public byte Note { get; set; }
-        public byte Velocity { get; set; }
-        public byte Position { get; set; }
-        public byte Duration { get; set; }
-    }
+   
 
     public class BarStartedEventArgs : EventArgs
     {

@@ -191,10 +191,11 @@
     <Compile Include="Convertors\HiddenWhenZeroConvertor.cs" />
     <Compile Include="Convertors\VisibleWhenZeroConvertor.cs" />
     <Compile Include="Convertors\VisibleWhenNullConvertor.cs" />
-    <Compile Include="Models\EmotionService.cs" />
+    <Compile Include="Models\NoteCommand.cs" />
+    <Compile Include="Services\EmotionService.cs" />
     <Compile Include="Models\Feedback.cs" />
-    <Compile Include="Models\Music\BassLineGenerator.cs" />
-    <Compile Include="Models\Music\MelodyService.cs" />
+    <Compile Include="Services\BassLineGenerator.cs" />
+    <Compile Include="Services\MelodyService.cs" />
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
@@ -218,10 +219,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\FeedbackService.cs" />
-    <Compile Include="Models\LightController.cs" />
-    <Compile Include="Models\Music\MidiInterface.cs" />
-    <Compile Include="Models\Music\SongController.cs" />
+    <Compile Include="Services\FeedbackService.cs" />
+    <Compile Include="Services\LightController.cs" />
+    <Compile Include="Services\MidiInterface.cs" />
+    <Compile Include="Services\SongController.cs" />
     <Compile Include="Pages\FeedbackPage.xaml.cs">
       <DependentUpon>FeedbackPage.xaml</DependentUpon>
     </Compile>

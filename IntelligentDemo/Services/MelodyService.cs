@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntelligentDemo.Models.Music
+namespace IntelligentDemo.Models.Services
 {
     public class MelodyService
     {

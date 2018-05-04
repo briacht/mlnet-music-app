@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using IntelligentDemo.Models;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace IntelligentDemo.Models.Music
+namespace IntelligentDemo.Services
 {
     public class BassLineGenerator
     {

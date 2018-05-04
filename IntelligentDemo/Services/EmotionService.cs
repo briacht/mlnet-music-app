@@ -6,12 +6,18 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IntelligentDemo.Models
+namespace IntelligentDemo.Services
 {
     class EmotionService
     {
-        private FaceAPI _faceAPI = new FaceAPI(new ApiKeyServiceClientCredentials(App.Secrets.EmotionKey));
-        private IList<FaceAttributeType> _attributes = new[] { FaceAttributeType.Emotion };
+        private FaceAPI _faceAPI;
+        private IList<FaceAttributeType> _attributes;
+
+        public EmotionService()
+        {
+            _faceAPI = new FaceAPI(new ApiKeyServiceClientCredentials(App.Secrets.FaceApiKey));
+            _attributes = new[] { FaceAttributeType.Emotion };
+        }
 
         public async Task<string> DetectEmotionFromFile(string file)
         {

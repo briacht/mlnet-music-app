@@ -1,6 +1,6 @@
 ﻿using IntelligentDemo.Convertors;
 using IntelligentDemo.Models;
-using IntelligentDemo.Models.Music;
+using IntelligentDemo.Services;
 using System;
 using System.Windows;
 using System.Windows.Controls;

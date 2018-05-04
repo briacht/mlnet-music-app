@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
+﻿using IntelligentDemo.Models;
+using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -6,33 +7,35 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IntelligentDemo.Models
+namespace IntelligentDemo.Services
 {
     public class FeedbackService
     {
-        public async Task<IEnumerable<Feedback>> GetFeedback()
-        {
-            var result = await LoadFeedback();
-            await AnalyzeFeedback(result);
-            return result;
-        }
+        private TextAnalyticsAPI _textAnalyticsAPI;
 
-        private async Task AnalyzeFeedback(IEnumerable<Feedback> feedback)
+        public FeedbackService()
         {
-            ITextAnalyticsAPI client = new TextAnalyticsAPI
+            _textAnalyticsAPI = new TextAnalyticsAPI
             {
                 AzureRegion = AzureRegions.Westus,
-                SubscriptionKey = App.Secrets.SentimentKey
+                SubscriptionKey = App.Secrets.TextAnalyticsKey
             };
+        }
 
-            var inputs = feedback.Select(f => new MultiLanguageInput("en", f.Id, f.Text)).ToList();
+        public async Task<IEnumerable<Feedback>> GetFeedback()
+        {
+            var data = await LoadFeedback();
 
-            var result = await client.SentimentAsync(new MultiLanguageBatchInput(inputs));
+            var inputs = data.Select(f => new MultiLanguageInput("en", f.Id, f.Text)).ToList();
+
+            var result = await _textAnalyticsAPI.SentimentAsync(new MultiLanguageBatchInput(inputs));
 
             foreach (var document in result.Documents)
             {
-                feedback.Single(f => f.Id == document.Id).Score = document.Score;
+                data.Single(f => f.Id == document.Id).Score = document.Score;
             }
+
+            return data;
         }
 
         private async Task<IEnumerable<Feedback>> LoadFeedback()
