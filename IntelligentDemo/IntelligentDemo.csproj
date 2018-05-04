@@ -189,6 +189,7 @@
     </Compile>
     <Compile Include="Convertors\RatioConvertor.cs" />
     <Compile Include="Convertors\HiddenWhenZeroConvertor.cs" />
+    <Compile Include="Convertors\HiddenWhenNullConvertor.cs" />
     <Compile Include="Convertors\VisibleWhenZeroConvertor.cs" />
     <Compile Include="Convertors\VisibleWhenNullConvertor.cs" />
     <Compile Include="Models\NoteCommand.cs" />

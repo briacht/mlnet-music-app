@@ -53,11 +53,6 @@ namespace IntelligentDemo.Pages
                 await LoadRecentTweets();
                 ConnectToTwitterStream();
 
-                if (Tweets.Any())
-                {
-                    DetailsList.SelectedIndex = 0;
-                }
-
                 _songController.BarStarted += Controller_BarStarted;
             }
         }
