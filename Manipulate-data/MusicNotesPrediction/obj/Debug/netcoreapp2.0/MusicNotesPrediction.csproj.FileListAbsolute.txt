@@ -1,0 +1,11 @@
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\bin\Debug\netcoreapp2.0\Microsoft.ML.MusicNotesPrediction.deps.json
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\bin\Debug\netcoreapp2.0\Microsoft.ML.MusicNotesPrediction.runtimeconfig.json
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\bin\Debug\netcoreapp2.0\Microsoft.ML.MusicNotesPrediction.runtimeconfig.dev.json
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\bin\Debug\netcoreapp2.0\Microsoft.ML.MusicNotesPrediction.dll
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\bin\Debug\netcoreapp2.0\Microsoft.ML.MusicNotesPrediction.pdb
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\obj\Debug\netcoreapp2.0\MusicNotesPrediction.csprojResolveAssemblyReference.cache
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\obj\Debug\netcoreapp2.0\MusicNotesPrediction.csproj.CoreCompileInputs.cache
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\obj\Debug\netcoreapp2.0\MusicNotesPrediction.AssemblyInfoInputs.cache
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\obj\Debug\netcoreapp2.0\MusicNotesPrediction.AssemblyInfo.cs
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\obj\Debug\netcoreapp2.0\Microsoft.ML.MusicNotesPrediction.dll
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\MusicNotesPrediction\obj\Debug\netcoreapp2.0\Microsoft.ML.MusicNotesPrediction.pdb
