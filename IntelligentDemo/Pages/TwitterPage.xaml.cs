@@ -1,7 +1,5 @@
-﻿using IntelligentDemo.Models;
-using IntelligentDemo.Services;
+﻿using IntelligentDemo.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +20,7 @@ namespace IntelligentDemo.Pages
         private const double DEFAULT_VOLUME = 0.75;
         private const string HASHTAG = "#mldemotest";
 
-        private static readonly Dictionary<string, IEnumerable<NoteCommand>> _percussionLines = InitializePercussionLines();
+        private PercussionGenerator _percussionGenerator = new PercussionGenerator();
         private EmotionService _emotionService = new EmotionService();
         private SongController _songController;
         private Task _streamTask;
@@ -37,7 +35,7 @@ namespace IntelligentDemo.Pages
             _songController = controller;
         }
 
-        public ObservableCollection<Tweet> Tweets = new ObservableCollection<Tweet>();
+        public ObservableCollection<Models.Tweet> Tweets = new ObservableCollection<Models.Tweet>();
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -80,7 +78,7 @@ namespace IntelligentDemo.Pages
 
         private void LoadTestTweets()
         {
-            Tweets.Add(new Tweet
+            Tweets.Add(new Models.Tweet
             {
                 ImageUrl = "https://pbs.twimg.com/media/DcKzkzbUQAA6c1u.jpg",
                 Text = "This is a really long tweet that will reach the 280 character limit of Twitter, plus the API we are using will also stick the image URL on the end of the message, so we'll include that too just to make sure we get the most text we possibly can into this very long Tweet thing. Yay",
@@ -88,7 +86,7 @@ namespace IntelligentDemo.Pages
                 Handle = "testuser99",
                 Name = "John Doe"
             });
-            Tweets.Add(new Tweet
+            Tweets.Add(new Models.Tweet
             {
                 ImageUrl = "https://pbs.twimg.com/media/Dbl1dkuV0AAJFeP.jpg",
                 Text = HASHTAG,
@@ -113,7 +111,7 @@ namespace IntelligentDemo.Pages
                 var imgUrl = tweet.Entities.Medias[0].MediaURL;
                 var emotion = await _emotionService.DetectEmotionFromUrl(imgUrl);
 
-                var result = new Tweet
+                var result = new Models.Tweet
                 {
                     ImageUrl = imgUrl,
                     Emotion = emotion,
@@ -167,14 +165,8 @@ namespace IntelligentDemo.Pages
             _nextIndex = index;
 
             var next = Tweets[_nextIndex.Value];
-            if (_percussionLines.ContainsKey(next.Emotion))
-            {
-                _songController.SetNextPercussionBar(_percussionLines[next.Emotion]);
-            }
-            else
-            {
-                _songController.SetNextPercussionBar(_percussionLines.Values.ElementAt(_nextIndex.HasValue ? _nextIndex.Value % _percussionLines.Count : 0));
-            }
+            var measure = _percussionGenerator.GetPercussionMeasure(next.Emotion);
+            _songController.SetNextPercussionBar(measure);
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -209,94 +201,9 @@ namespace IntelligentDemo.Pages
             }
         }
 
-        private static Dictionary<string, IEnumerable<NoteCommand>> InitializePercussionLines()
-        {
-            var result = new Dictionary<string, IEnumerable<NoteCommand>>();
-
-            result["anger"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 36, Duration = 16, Velocity = 127, Position = 1},
-            };
-
-            result["contempt"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 100, Position = 5},
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 127, Position = 9},
-                new NoteCommand{ Note = 36, Duration = 4, Velocity = 100, Position = 13},
-            };
-
-            result["disgust"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 40, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 38, Duration = 4, Velocity = 127, Position = 5},
-                new NoteCommand{ Note = 36, Duration = 8, Velocity = 127, Position = 9},
-            };
-
-            result["fear"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 1},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 3},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 5},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 7},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 9},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 11},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 13},
-                new NoteCommand{ Note = 48, Duration = 2, Velocity = 100, Position = 15},
-            };
-
-            result["happiness"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 48, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 50, Duration = 4, Velocity = 127, Position = 5},
-                new NoteCommand{ Note = 48, Duration = 4, Velocity = 127, Position = 9},
-                new NoteCommand{ Note = 50, Duration = 4, Velocity = 127, Position = 13},
-            };
-
-            result["neutral"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 48, Duration = 8, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 48, Duration = 8, Velocity = 127, Position = 9},
-            };
-
-            result["sadness"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 38, Duration = 8, Velocity = 100, Position = 1},
-                new NoteCommand{ Note = 36, Duration = 8, Velocity = 100, Position = 9},
-            };
-
-            result["surprise"] = new List<NoteCommand>
-            {
-                new NoteCommand{ Note = 38, Duration = 4, Velocity = 127, Position = 1},
-                new NoteCommand{ Note = 38, Duration = 4, Velocity = 127, Position = 5},
-                new NoteCommand{ Note = 60, Duration = 8, Velocity = 127, Position = 9},
-            };
-
-            return result;
-        }
-
         public void Dispose()
         {
             _streamTask?.Dispose();
-        }
-
-        public class Tweet
-        {
-            public string ImageUrl { get; set; }
-            public string Emotion { get; set; }
-            public string Text { get; set; }
-            public string Handle { get; set; }
-            public string Name { get; set; }
-
-            public string DisplayText
-            {
-                get
-                {
-                    return Text.Length > 50
-                        ? Text.Substring(0, 50) + "..."
-                        : Text;
-                }
-            }
         }
     }
 }

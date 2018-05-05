@@ -24,9 +24,9 @@ namespace IntelligentDemo.Services
         private DispatcherTimer _timer;
         private List<Action<MidiWrapper>>[] _currentBar;
         private List<Action<MidiWrapper>>[] _carryOver;
-        private IEnumerable<NoteCommand> _nextMelodyBar;
-        private IEnumerable<NoteCommand> _nextBassBar;
-        private IEnumerable<NoteCommand> _nextPercussionBar;
+        private IEnumerable<MusicNote> _nextMelodyBar;
+        private IEnumerable<MusicNote> _nextBassBar;
+        private IEnumerable<MusicNote> _nextPercussionBar;
         private double _bassVolume = 1;
         private double _percussionVolume = 1;
         private double _melodyVolume = 1;
@@ -149,17 +149,17 @@ namespace IntelligentDemo.Services
             return commands;
         }
 
-        public void SetNextMelodyBar(IEnumerable<NoteCommand> notes)
+        public void SetNextMelodyBar(IEnumerable<MusicNote> notes)
         {
             _nextMelodyBar = notes;
         }
 
-        public void SetNextBassBar(IEnumerable<NoteCommand> notes)
+        public void SetNextBassBar(IEnumerable<MusicNote> notes)
         {
             _nextBassBar = notes;
         }
 
-        public void SetNextPercussionBar(IEnumerable<NoteCommand> notes)
+        public void SetNextPercussionBar(IEnumerable<MusicNote> notes)
         {
             _nextPercussionBar = notes;
         }
