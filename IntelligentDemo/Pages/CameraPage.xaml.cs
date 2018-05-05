@@ -118,7 +118,7 @@ namespace IntelligentDemo.Pages
             else
             {
                 playing = false;
-                _songController.SetNextBassBar(Array.Empty<NoteCommand>());
+                _songController.SetNextBassBar(null);
                 PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
             }
         }

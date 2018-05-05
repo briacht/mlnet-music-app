@@ -204,7 +204,7 @@ namespace IntelligentDemo.Pages
             else
             {
                 playing = false;
-                _songController.SetNextPercussionBar(Array.Empty<NoteCommand>());
+                _songController.SetNextPercussionBar(null);
                 PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
             }
         }

@@ -6,5 +6,6 @@
         public byte Velocity { get; set; }
         public byte Position { get; set; }
         public byte Duration { get; set; }
+        public bool IsPredicted { get; set; }
     }
 }

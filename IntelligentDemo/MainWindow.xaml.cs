@@ -36,9 +36,6 @@ namespace IntelligentDemo
         public void Dispose()
         {
             _controller.Dispose();
-
-            //if (_feedbackPage.IsValueCreated) _feedbackPage.Value.Dispose();
-            //if (_twitterPage.IsValueCreated) _twitterPage.Value.Dispose();
         }
 
         private void Music_Click(object sender, RoutedEventArgs e)

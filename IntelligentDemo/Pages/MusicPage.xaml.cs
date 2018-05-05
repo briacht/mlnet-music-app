@@ -1,7 +1,9 @@
-﻿using IntelligentDemo.Models;
+﻿using IntelligentDemo.Convertors;
+using IntelligentDemo.Models;
 using IntelligentDemo.Models.Services;
 using IntelligentDemo.Services;
 using PSAMControlLibrary;
+using PSAMWPFControlLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,8 @@ namespace IntelligentDemo.Pages
 
         private SongController _songController;
         private MelodyService _melodyService = new MelodyService();
+        private int? _controllerBarWhenPlayStarted;
+        private MeasureInfo[] _measures;
         bool initialized;
 
         bool playing;
@@ -35,92 +39,11 @@ namespace IntelligentDemo.Pages
                 VolumeSlider.Value = DEFAULT_VOLUME * 100;
 
                 var data = _melodyService.LoadSong();
-                FixMissingNotes(data[0]);
-                ShowMeasure(data[0]);
-                _songController.SetNextMelodyBar(data[0]);
+                FixMissingNotes(data);
+                _measures = CreateDisplayMeasures(data);
+                Redraw();
 
                 _songController.BarStarted += _songController_BarStarted;
-            }
-        }
-
-        private List<NoteCommand> _fixedNotes = new List<NoteCommand>();
-
-        private void FixMissingNotes(List<NoteCommand> measure)
-        {
-            foreach (var note in measure.Where(n => n.Note == 0))
-            {
-                note.Note = 48;
-                _fixedNotes.Add(note);
-            }
-        }
-
-        private void ShowMeasure(List<NoteCommand> notes)
-        {
-            var s = new List<MusicalSymbol>();
-            foreach (var note in notes.OrderBy(n => n.Position))
-            {
-                var t = TranslateNote(note);
-                var psamNote = new Note(t.Note, t.Alter, t.Octave, TranslateDuration(note), NoteStemDirection.Down, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Single });
-                if(_fixedNotes.Contains(note))
-                {
-                    psamNote.MusicalCharacterColor = System.Drawing.Color.Red;
-                }
-                s.Add(psamNote);
-            }
-
-            viewer.Symbols = s;
-        }
-
-        private (string Note, int Alter, int Octave) TranslateNote(NoteCommand note)
-        {
-            var octave = note.Note / 12 - 1;
-            switch (note.Note % 12)
-            {
-                case 0:
-                    return ("C", 0, octave);
-                case 1:
-                    return ("C", 1, octave);
-                case 2:
-                    return ("D", 0, octave);
-                case 3:
-                    return ("D", 1, octave);
-                case 4:
-                    return ("E", 0, octave);
-                case 5:
-                    return ("F", 0, octave);
-                case 6:
-                    return ("F", 1, octave);
-                case 7:
-                    return ("G", 0, octave);
-                case 8:
-                    return ("G", 1, octave);
-                case 9:
-                    return ("A", 0, octave);
-                case 10:
-                    return ("A", 1, octave);
-                case 11:
-                    return ("B", 0, octave);
-                default:
-                    throw new Exception("Unreachable code!");
-            }
-        }
-
-        private MusicalSymbolDuration TranslateDuration(NoteCommand note)
-        {
-            switch (note.Duration)
-            {
-                case 1:
-                    return MusicalSymbolDuration.Sixteenth;
-                case 2:
-                    return MusicalSymbolDuration.Eighth;
-                case 4:
-                    return MusicalSymbolDuration.Quarter;
-                case 8:
-                    return MusicalSymbolDuration.Half;
-                case 16:
-                    return MusicalSymbolDuration.Whole;
-                default:
-                    throw new ArgumentException($"Don't know how to translate {note.Duration}/16ths of a note.");
             }
         }
 
@@ -128,12 +51,22 @@ namespace IntelligentDemo.Pages
         {
             if (playing)
             {
-                if (e.BarNumber % 4 == 0)
+                if (!_controllerBarWhenPlayStarted.HasValue)
                 {
-                    
-
-                    //_songController.SetNextMelodyBar(_melody);
+                    _controllerBarWhenPlayStarted = e.BarNumber;
                 }
+
+
+                var current = (e.BarNumber - _controllerBarWhenPlayStarted.Value) % _measures.Length;
+                var next = (current + 1) % _measures.Length;
+                var previous = current == 0
+                    ? _measures.Length - 1
+                    : current - 1;
+
+                _measures[previous].DisplayGrid.Background = Brushes.White;
+                _measures[current].DisplayGrid.Background = Brushes.Yellow;
+
+                _songController.SetNextMelodyBar(_measures[next].Measure.Notes);
             }
         }
 
@@ -146,16 +79,7 @@ namespace IntelligentDemo.Pages
         {
             if (!playing)
             {
-                //if (DetailsList.Items.Count > 0)
-                //{
-                //    if (DetailsList.SelectedIndex < 0)
-                //    {
-                //        DetailsList.SelectedIndex = 0;
-                //    }
-
-                //    SetNext(DetailsList.SelectedIndex);
-                //}
-                // _songController.SetNextMelodyBar(_melody);
+                _songController.SetNextMelodyBar(_measures[0].Measure.Notes);
 
                 playing = true;
                 PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10));
@@ -165,9 +89,129 @@ namespace IntelligentDemo.Pages
             else
             {
                 playing = false;
-                _songController.SetNextMelodyBar(Array.Empty<NoteCommand>());
+                _songController.SetNextMelodyBar(null);
+                _controllerBarWhenPlayStarted = null;
                 PlayButton.Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));
+
+                foreach (var item in _measures)
+                {
+                    item.DisplayGrid.Background = Brushes.White;
+                }
             }
         }
+
+        private void Redraw()
+        {
+            var columns = 7;
+            MusicPanel.Children.Clear();
+
+            StackPanel current = null;
+            for (int i = 0; i < _measures.Length; i++)
+            {
+                if (i % (columns - 1) == 0)
+                {
+                    current = new StackPanel { Orientation = Orientation.Horizontal };
+                    MusicPanel.Children.Add(current);
+
+                    var grid = new Grid { Width = 40, Height = 100 };
+                    grid.Children.Add(BuildClef());
+                    current.Children.Add(grid);
+                }
+
+                current.Children.Add(_measures[i].DisplayGrid);
+            }
+        }
+
+        private void DetailsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private static MeasureInfo[] CreateDisplayMeasures(IEnumerable<Measure> measures)
+        {
+            var result = new List<MeasureInfo>();
+            foreach (var measure in measures)
+            {
+                var grid = new Grid { Width = CalculateWidth(measure), Height = 100 };
+                grid.Children.Add(BuildVisualMeasure(measure));
+                result.Add(new MeasureInfo
+                {
+                    Measure = measure,
+                    DisplayGrid = grid
+                });
+            }
+
+            return result.ToArray();
+        }
+
+        private static IncipitViewerWPF BuildClef()
+        {
+            var result = new IncipitViewerWPF();
+            result.AddMusicalSymbol(new Clef(ClefType.GClef, 2));
+            result.AddMusicalSymbol(new TimeSignature(TimeSignatureType.Numbers, 4, 4));
+            return result;
+        }
+
+        private static IncipitViewerWPF BuildVisualMeasure(Measure measure)
+        {
+            var result = new IncipitViewerWPF();
+            var symbols = MeasureToPsamSymbolConvertor.Convert(measure);
+            foreach (var symbol in symbols)
+            {
+                result.AddMusicalSymbol(symbol);
+            }
+            result.AddMusicalSymbol(new Barline());
+
+            return result;
+        }
+
+        private static int CalculateWidth(Measure measure)
+        {
+            var width = 0;
+            foreach (var note in measure.Notes)
+            {
+                switch (note.Duration)
+                {
+                    case 16:
+                        width += 50;
+                        break;
+                    case 8:
+                        width += 30;
+                        break;
+                    case 4:
+                        width += 18;
+                        break;
+                    case 2:
+                        width += 15;
+                        break;
+                    default:
+                        width += 14;
+                        break;
+                }
+            }
+
+            // barline
+            width += 17;
+
+            return width;
+        }
+
+        private static void FixMissingNotes(List<Measure> measures)
+        {
+            foreach (var measure in measures)
+            {
+                foreach (var note in measure.Notes.Where(n => n.Note == 0))
+                {
+                    note.IsPredicted = true;
+                    note.Note = 48;
+                }
+            }
+        }
+    }
+
+    public class MeasureInfo
+    {
+        public Measure Measure { get; set; }
+        public Grid DisplayGrid { get; set; }
     }
 }

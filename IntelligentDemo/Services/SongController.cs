@@ -1,6 +1,7 @@
 ﻿using IntelligentDemo.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Threading;
 
 namespace IntelligentDemo.Services
@@ -79,7 +80,7 @@ namespace IntelligentDemo.Services
             _timer.Start();
         }
 
-        public void Pause()
+        public void Stop()
         {
             _timer.Stop();
         }
@@ -136,11 +137,14 @@ namespace IntelligentDemo.Services
                 }
             }
 
-            // Metronome
-            commands[0].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 81, 100));
-            commands[4].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
-            commands[8].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
-            commands[12].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+            if (_nextMelodyBar != null || _nextBassBar != null || _nextPercussionBar != null)
+            {
+                // Metronome
+                commands[0].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 81, 100));
+                commands[4].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+                commands[8].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+                commands[12].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+            }
 
             return commands;
         }
