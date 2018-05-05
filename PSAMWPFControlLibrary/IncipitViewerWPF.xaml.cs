@@ -668,13 +668,13 @@ namespace PSAMWPFControlLibrary
 
             try
             {
+                currentClefPositionY = lines[4] - 24.4f - (currentClef.Line - 1) * lineSpacing;
                 foreach (MusicalSymbol symbol in incipit) //Perform one pass to determine current clef / Wykonaj jeden przebieg żeby określić bieżący klucz
                 {
                     if (symbol.Type == MusicalSymbolType.Clef)
                     {
                         currentClef = (Clef)symbol;
                         currentClefPositionY = lines[4] - 24.4f - (((Clef)symbol).Line - 1) * lineSpacing;
-                        currentClef = (Clef)symbol;
                         drawingContext.DrawText(new FormattedText(symbol.MusicalCharacter, Thread.CurrentThread.CurrentUICulture,
                             FlowDirection.LeftToRight, TypeFaces.MusicFont, 27.5f, Brushes.Black), new Point(
                                 currentXPosition + 3.5f, currentClefPositionY));
@@ -817,7 +817,9 @@ namespace PSAMWPFControlLibrary
                         if (note.HasNatural == true) currentXPosition += 9;
 
                         //Draw a note / Rysuj nutę:
-                        var brush = new SolidColorBrush(Color.FromRgb(note.MusicalCharacterColor.R, note.MusicalCharacterColor.G, note.MusicalCharacterColor.B));
+                        var noteBrush = new SolidColorBrush(Color.FromRgb(note.MusicalCharacterColor.R, note.MusicalCharacterColor.G, note.MusicalCharacterColor.B));
+                        var notePen = new Pen(noteBrush, 1.0f);
+                        var noteBeamPen = new Pen(noteBrush, 2.0f);
                         if (!note.IsGraceNote)
                             DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, brush, currentXPosition + 3.5f, notePositionY, 27.0f);
                         else
@@ -872,7 +874,7 @@ namespace PSAMWPFControlLibrary
 
                                 if (note.BeamList.Count > 0)
                                     if ((note.BeamList[0] != NoteBeamType.Continue) || note.CustomStemEndPosition)
-                                        drawingContext.DrawLine(pen, new Point(currentStemPositionX, notePositionY - 1 + 28),
+                                        drawingContext.DrawLine(notePen, new Point(currentStemPositionX, notePositionY - 1 + 28),
                                             new Point(currentStemPositionX, currentStemEndPositionY + 28));
                             }
                             else
@@ -891,7 +893,7 @@ namespace PSAMWPFControlLibrary
 
                                 if (note.BeamList.Count > 0)
                                     if ((note.BeamList[0] != NoteBeamType.Continue) || note.CustomStemEndPosition)
-                                        drawingContext.DrawLine(pen, new Point(currentStemPositionX, notePositionY - 7 + 30),
+                                        drawingContext.DrawLine(notePen, new Point(currentStemPositionX, notePositionY - 7 + 30),
                                             new Point(currentStemPositionX, currentStemEndPositionY + 28));
                             }
                             note.StemEndLocation = new System.Drawing.PointF(currentStemPositionX, currentStemEndPositionY);
@@ -960,18 +962,18 @@ namespace PSAMWPFControlLibrary
                                 float xPos = currentStemPositionX - 4;
                                 if (((Note)symbol).StemDirection == NoteStemDirection.Down)
                                 {
-                                    DrawString(drawingContext, ((Note)symbol).NoteFlagCharacterRev, TypeFaces.MusicFont, textBrush,
+                                    DrawString(drawingContext, ((Note)symbol).NoteFlagCharacterRev, TypeFaces.MusicFont, noteBrush,
                                         xPos + 3.5f, currentStemEndPositionY + 7, 27.5f);
                                 }
                                 else
                                 {
-                                    DrawString(drawingContext, ((Note)symbol).NoteFlagCharacter, TypeFaces.MusicFont, textBrush,
+                                    DrawString(drawingContext, ((Note)symbol).NoteFlagCharacter, TypeFaces.MusicFont, noteBrush,
                                         xPos + 3.5f, currentStemEndPositionY - 1, 27.5f);
                                 }
                             }
                             else if (beam == NoteBeamType.ForwardHook)
                             {
-                                drawingContext.DrawLine(beamPen, new Point(currentStemPositionX + 6,
+                                drawingContext.DrawLine(noteBeamPen, new Point(currentStemPositionX + 6,
                                     currentStemEndPositionY + 28 + beamOffset * beamSpaceDirection),
                                     new Point(currentStemPositionX, currentStemEndPositionY + 28
                                     + beamOffset * beamSpaceDirection));
@@ -982,7 +984,7 @@ namespace PSAMWPFControlLibrary
                             }
                             else if (beam == NoteBeamType.BackwardHook)
                             {
-                                drawingContext.DrawLine(beamPen, new Point(currentStemPositionX - 6,
+                                drawingContext.DrawLine(noteBeamPen, new Point(currentStemPositionX - 6,
                                     currentStemEndPositionY + 28 + beamOffset * beamSpaceDirection),
                                     new Point(currentStemPositionX, currentStemEndPositionY + 28
                                     + beamOffset * beamSpaceDirection));
