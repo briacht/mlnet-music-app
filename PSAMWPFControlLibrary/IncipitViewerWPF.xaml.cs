@@ -619,7 +619,7 @@ namespace PSAMWPFControlLibrary
             Brush textBrush = new SolidColorBrush(Colors.Black);
 
             float currentClefPositionY = 0;
-            Clef currentClef = new Clef(ClefType.CClef, 2);
+            Clef currentClef = new Clef(ClefType.GClef, 2);
             PSAMControlLibrary.Key currentKey = new PSAMControlLibrary.Key(0);
             int currentXPosition = 0;
             int lastXPosition = 0; //for chords / dla akordów
@@ -821,9 +821,9 @@ namespace PSAMWPFControlLibrary
                         var notePen = new Pen(noteBrush, 1.0f);
                         var noteBeamPen = new Pen(noteBrush, 2.0f);
                         if (!note.IsGraceNote)
-                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, brush, currentXPosition + 3.5f, notePositionY, 27.0f);
+                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, noteBrush, currentXPosition + 3.5f, notePositionY, 27.0f);
                         else
-                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.GraceNoteFont, brush, currentXPosition + 5.5f,
+                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.GraceNoteFont, noteBrush, currentXPosition + 5.5f,
                                 notePositionY + 2, 24.5f);
                         lastXPosition = currentXPosition;
                         note.Location = new System.Drawing.PointF(currentXPosition, notePositionY);
