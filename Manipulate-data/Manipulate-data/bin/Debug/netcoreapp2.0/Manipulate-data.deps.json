@@ -1,0 +1,58 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.0",
+    "signature": "97eaf25097442f2dbd8bc3270d7a65ad7b7a98db"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.0": {
+      "Manipulate-data/1.0.0": {
+        "dependencies": {
+          "CsvHelper": "7.1.0"
+        },
+        "runtime": {
+          "Manipulate-data.dll": {}
+        }
+      },
+      "CsvHelper/7.1.0": {
+        "dependencies": {
+          "Microsoft.CSharp": "4.4.0",
+          "System.Reflection.TypeExtensions": "4.4.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/CsvHelper.dll": {}
+        }
+      },
+      "Microsoft.CSharp/4.4.0": {},
+      "System.Reflection.TypeExtensions/4.4.0": {}
+    }
+  },
+  "libraries": {
+    "Manipulate-data/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CsvHelper/7.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-H9+MtVj4P6oXaV/ODdYYFA20LFeIfIY77xL+nfFaPIzZy5YdbezzLvUPWX6Lm3BU/pzqXZCgzxO8vLh6+wCQWA==",
+      "path": "csvhelper/7.1.0",
+      "hashPath": "csvhelper.7.1.0.nupkg.sha512"
+    },
+    "Microsoft.CSharp/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vvVR/B08YVghQ4jHEloxqw2ZWzEGE1AOA5E0DioUM3ujbXz6FD3AfB/0Jl2ohJPd0nXYGwmPe1En6HTsSriq1A==",
+      "path": "microsoft.csharp/4.4.0",
+      "hashPath": "microsoft.csharp.4.4.0.nupkg.sha512"
+    },
+    "System.Reflection.TypeExtensions/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dkmh/ySlwnXJp/1qYP9uyKkCK1CXR/REFzl7abHcArxBcV91mY2CgrrzSRA5Z/X4MevJWwXsklGRdR3A7K9zbg==",
+      "path": "system.reflection.typeextensions/4.4.0",
+      "hashPath": "system.reflection.typeextensions.4.4.0.nupkg.sha512"
+    }
+  }
+}

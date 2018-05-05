@@ -1,0 +1,11 @@
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.deps.json
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.runtimeconfig.json
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.runtimeconfig.dev.json
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.dll
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.pdb
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.csprojResolveAssemblyReference.cache
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.csproj.CoreCompileInputs.cache
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.AssemblyInfoInputs.cache
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.AssemblyInfo.cs
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.dll
+C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.pdb
