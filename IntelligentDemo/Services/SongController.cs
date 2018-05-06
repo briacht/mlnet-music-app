@@ -36,7 +36,7 @@ namespace IntelligentDemo.Services
         {
             _midi = new MidiWrapper();
             _midi.SelectInstrument(BASS_CHANNEL, 37);
-            _midi.SelectInstrument(MELODY_CHANNEL, 81);
+            _midi.SelectInstrument(MELODY_CHANNEL, 1);
 
             _carryOver = new List<Action<MidiWrapper>>[SIXTEENTHS_PER_BAR];
             for (int i = 0; i < _carryOver.Length; i++)

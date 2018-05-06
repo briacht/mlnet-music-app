@@ -74,6 +74,7 @@ namespace IntelligentDemo.ViewModels
                         break;
                 }
 
+                if (note.NumberOfDots > 0) width += 16;
                 width += note.NumberOfDots * 6;
                 width += note.Alter * 9;
             }
