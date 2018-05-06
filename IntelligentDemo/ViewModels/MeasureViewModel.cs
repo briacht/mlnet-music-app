@@ -2,6 +2,9 @@
 using IntelligentDemo.Models;
 using PSAMControlLibrary;
 using PSAMWPFControlLibrary;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace IntelligentDemo.ViewModels
@@ -11,10 +14,11 @@ namespace IntelligentDemo.ViewModels
         public MeasureViewModel(MusicMeasure measure)
         {
             Measure = measure;
-            Width = CalculateWidth(measure);
 
+            var viewer = BuildVisualMeasure(measure);
+            Width = viewer.Width;
             var grid = new Grid { Width = Width, Height = 100 };
-            grid.Children.Add(BuildVisualMeasure(measure));
+            grid.Children.Add(viewer.Viewer);
             DisplayGrid = grid;
         }
 
@@ -30,7 +34,7 @@ namespace IntelligentDemo.ViewModels
             return result;
         }
 
-        private static IncipitViewerWPF BuildVisualMeasure(MusicMeasure measure)
+        private static (IncipitViewerWPF Viewer, int Width) BuildVisualMeasure(MusicMeasure measure)
         {
             var result = new IncipitViewerWPF();
             var symbols = MeasureToPsamSymbolConvertor.Convert(measure);
@@ -40,32 +44,38 @@ namespace IntelligentDemo.ViewModels
             }
             result.AddMusicalSymbol(new Barline());
 
-            return result;
+            return (result, CalculateWidth(symbols));
         }
 
-        private static int CalculateWidth(MusicMeasure measure)
+        private static int CalculateWidth(List<MusicalSymbol> symbols)
         {
             var width = 0;
-            foreach (var note in measure.Notes)
+            foreach (var note in symbols.OfType<Note>())
             {
                 switch (note.Duration)
                 {
-                    case 16:
+                    case MusicalSymbolDuration.Whole:
                         width += 50;
                         break;
-                    case 8:
+                    case MusicalSymbolDuration.Half:
                         width += 30;
                         break;
-                    case 4:
+                    case MusicalSymbolDuration.Quarter:
                         width += 18;
                         break;
-                    case 2:
+                    case MusicalSymbolDuration.Eighth:
                         width += 15;
+                        break;
+                    case MusicalSymbolDuration.Sixteenth:
+                        width += 14;
                         break;
                     default:
                         width += 14;
                         break;
                 }
+
+                width += note.NumberOfDots * 6;
+                width += note.Alter * 9;
             }
 
             // barline
@@ -73,5 +83,39 @@ namespace IntelligentDemo.ViewModels
 
             return width;
         }
+
+        //private static int CalculateWidth(MusicMeasure measure)
+        //{
+        //    var width = 0;
+        //    foreach (var note in measure.Notes)
+        //    {
+        //        switch (note.Duration)
+        //        {
+        //            case 16:
+        //                width += 50;
+        //                break;
+        //            case 8:
+        //                width += 30;
+        //                break;
+        //            case 6:
+        //                width += 36;
+        //                break;
+        //            case 4:
+        //                width += 18;
+        //                break;
+        //            case 2:
+        //                width += 15;
+        //                break;
+        //            default:
+        //                width += 14;
+        //                break;
+        //        }
+        //    }
+
+        //    // barline
+        //    width += 17;
+
+        //    return width;
+        //}
     }
 }

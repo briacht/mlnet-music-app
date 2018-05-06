@@ -37,7 +37,10 @@ namespace IntelligentDemo.Convertors
                     ? NoteStemDirection.Down
                     : NoteStemDirection.Up;
 
-                var psamNote = new Note(t.Note, t.Alter, t.Octave, TranslateDuration(note), direction, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Single });
+                var duration = TranslateDuration(note);
+
+                var psamNote = new Note(t.Note, t.Alter, t.Octave, duration.Duration, direction, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Single });
+                psamNote.NumberOfDots = duration.Dots;
                 if (note.IsRepaired)
                 {
                     psamNote.MusicalCharacterColor = System.Drawing.Color.Red;
@@ -82,20 +85,22 @@ namespace IntelligentDemo.Convertors
             }
         }
 
-        private static MusicalSymbolDuration TranslateDuration(MusicNote note)
+        private static (MusicalSymbolDuration Duration, int Dots) TranslateDuration(MusicNote note)
         {
             switch (note.Duration)
             {
                 case 1:
-                    return MusicalSymbolDuration.Sixteenth;
+                    return (MusicalSymbolDuration.Sixteenth, 0);
                 case 2:
-                    return MusicalSymbolDuration.Eighth;
+                    return (MusicalSymbolDuration.Eighth, 0);
                 case 4:
-                    return MusicalSymbolDuration.Quarter;
+                    return (MusicalSymbolDuration.Quarter, 0);
+                case 6:
+                    return (MusicalSymbolDuration.Eighth, 1);
                 case 8:
-                    return MusicalSymbolDuration.Half;
+                    return (MusicalSymbolDuration.Half, 0);
                 case 16:
-                    return MusicalSymbolDuration.Whole;
+                    return (MusicalSymbolDuration.Whole, 0);
                 default:
                     throw new ArgumentException($"Don't know how to translate {note.Duration}/16ths of a note.");
             }

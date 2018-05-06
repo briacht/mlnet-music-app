@@ -18,6 +18,7 @@ namespace IntelligentDemo.Services
         private static byte BASS_CHANNEL = 0;
         private static byte MELODY_CHANNEL = 1;
         private static byte PERCUSSION_CHANNEL = 9;
+        private static int SIXTEENTHS_PER_BAR = 16;
 
         private int _noteCount = 0;
         private MidiWrapper _midi;
@@ -37,7 +38,7 @@ namespace IntelligentDemo.Services
             _midi.SelectInstrument(BASS_CHANNEL, 37);
             _midi.SelectInstrument(MELODY_CHANNEL, 81);
 
-            _carryOver = new List<Action<MidiWrapper>>[16];
+            _carryOver = new List<Action<MidiWrapper>>[SIXTEENTHS_PER_BAR];
             for (int i = 0; i < _carryOver.Length; i++)
             {
                 _carryOver[i] = new List<Action<MidiWrapper>>();
@@ -87,7 +88,7 @@ namespace IntelligentDemo.Services
 
         private List<Action<MidiWrapper>>[] BuildNextBar()
         {
-            var commands = new List<Action<MidiWrapper>>[16];
+            var commands = new List<Action<MidiWrapper>>[SIXTEENTHS_PER_BAR];
             for (int i = 0; i < commands.Length; i++)
             {
                 commands[i] = new List<Action<MidiWrapper>>(_carryOver[i]);
@@ -100,13 +101,13 @@ namespace IntelligentDemo.Services
                 {
                     commands[note.Position - 1].Add(m => m.NoteOn(BASS_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _bassVolume)));
                     var off = (note.Position - 1) + note.Duration;
-                    if (off < 16)
+                    if (off < SIXTEENTHS_PER_BAR)
                     {
                         commands[off].Add(m => m.NoteOff(BASS_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _bassVolume)));
                     }
                     else
                     {
-                        _carryOver[off - 16].Add(m => m.NoteOff(BASS_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _bassVolume)));
+                        _carryOver[off - SIXTEENTHS_PER_BAR].Add(m => m.NoteOff(BASS_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _bassVolume)));
                     }
                 }
             }
@@ -117,13 +118,13 @@ namespace IntelligentDemo.Services
                 {
                     commands[note.Position - 1].Add(m => m.NoteOn(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
                     var off = (note.Position - 1) + note.Duration;
-                    if (off < 16)
+                    if (off < SIXTEENTHS_PER_BAR)
                     {
                         commands[off].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
                     }
                     else
                     {
-                        _carryOver[off - 16].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
+                        _carryOver[off - SIXTEENTHS_PER_BAR].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
                     }
                 }
             }
@@ -140,10 +141,11 @@ namespace IntelligentDemo.Services
             if (_nextMelodyBar != null || _nextBassBar != null || _nextPercussionBar != null)
             {
                 // Metronome
+                // TODO calculate based on SIXTEENTHS_PER_BAR
                 commands[0].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 81, 100));
                 commands[4].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
-                commands[8].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
-                commands[12].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+                //commands[8].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+                //commands[12].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
             }
 
             return commands;
@@ -166,7 +168,7 @@ namespace IntelligentDemo.Services
 
         private void OnSixteenthNotes()
         {
-            var noteInBar = _noteCount % 16;
+            var noteInBar = _noteCount % SIXTEENTHS_PER_BAR;
 
             if (noteInBar == 0)
             {
@@ -180,7 +182,7 @@ namespace IntelligentDemo.Services
 
             if (noteInBar == 0)
             {
-                OnBarStarted(new BarStartedEventArgs { BarNumber = _noteCount / 16 + 1 });
+                OnBarStarted(new BarStartedEventArgs { BarNumber = _noteCount / SIXTEENTHS_PER_BAR + 1 });
             }
 
             _noteCount++;

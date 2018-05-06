@@ -1,6 +1,12 @@
-﻿using IntelligentDemo.Models.Services;
+﻿using IntelligentDemo.Models;
+using IntelligentDemo.Models.Services;
 using IntelligentDemo.Services;
 using IntelligentDemo.ViewModels;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +20,6 @@ namespace IntelligentDemo.Pages
 
         private SongController _songController;
         private MelodyGenerator _melodyGenerator = new MelodyGenerator();
-        private MusicRepairer _musicRepairer = new MusicRepairer();
         private int? _controllerBarWhenPlayStarted;
         private MeasureViewModel[] _measures;
         bool initialized;
@@ -34,9 +39,35 @@ namespace IntelligentDemo.Pages
                 VolumeSlider.Value = DEFAULT_VOLUME * 100;
 
                 var data = _melodyGenerator.GetMelody();
-                _musicRepairer.Repair(data);
-                _measures = data.Select(m => new MeasureViewModel(m)).ToArray();
 
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "song.json");
+                var json = JsonConvert.SerializeObject(data);
+                File.WriteAllText(path, json);
+
+                // Hack: The learner we are using depends on native binaries and they are only
+                //       available on x64. But, the webcam and MIDI approach we are using only
+                //       work on x86. So we 
+                var startInfo = new ProcessStartInfo()
+                {
+                    CreateNoWindow = false,
+                    UseShellExecute = false,
+                    FileName = @"..\..\..\..\MusicProcessor\bin\x64\Debug\MusicProcessor.exe",
+                    Arguments = $"\"{path}\"",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                };
+
+                using (var process = Process.Start(startInfo))
+                {
+                    process.WaitForExit();
+                }
+
+                json = File.ReadAllText(path);
+                data = JsonConvert.DeserializeObject<List<MusicMeasure>>(json);
+
+                data.SelectMany(m => m.Notes.Where(n => n.Note == 0)).ToList()
+                    .ForEach(n => n.Note = 45);
+
+                _measures = data.Select(m => new MeasureViewModel(m)).ToArray();
                 Redraw();
 
                 _songController.BarStarted += _songController_BarStarted;
