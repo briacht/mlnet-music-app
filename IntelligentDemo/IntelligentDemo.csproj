@@ -175,6 +175,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\MeasureViewModel.cs" />
     <Page Include="Pages\CameraPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -193,12 +194,13 @@
     <Compile Include="Convertors\MeasureToPsamSymbolConvertor.cs" />
     <Compile Include="Convertors\VisibleWhenZeroConvertor.cs" />
     <Compile Include="Convertors\VisibleWhenNullConvertor.cs" />
-    <Compile Include="Models\Measure.cs" />
-    <Compile Include="Models\NoteCommand.cs" />
+    <Compile Include="Models\MusicMeasure.cs" />
+    <Compile Include="Models\MusicNote.cs" />
+    <Compile Include="Models\Tweet.cs" />
     <Compile Include="Services\EmotionService.cs" />
     <Compile Include="Models\Feedback.cs" />
-    <Compile Include="Services\BassLineGenerator.cs" />
-    <Compile Include="Services\MelodyService.cs" />
+    <Compile Include="Services\BassGenerator.cs" />
+    <Compile Include="Services\MelodyGenerator.cs" />
     <Compile Include="Pages\CameraPage.xaml.cs">
       <DependentUpon>CameraPage.xaml</DependentUpon>
     </Compile>
@@ -224,7 +226,9 @@
   <ItemGroup>
     <Compile Include="Services\FeedbackService.cs" />
     <Compile Include="Services\LightController.cs" />
+    <Compile Include="Services\MusicRepairer.cs" />
     <Compile Include="Services\MidiInterface.cs" />
+    <Compile Include="Services\PercussionGenerator.cs" />
     <Compile Include="Services\SongController.cs" />
     <Compile Include="Pages\FeedbackPage.xaml.cs">
       <DependentUpon>FeedbackPage.xaml</DependentUpon>
@@ -273,5 +277,6 @@
       <Name>PSAMWPFControlLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

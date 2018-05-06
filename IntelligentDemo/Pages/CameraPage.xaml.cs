@@ -19,7 +19,7 @@ namespace IntelligentDemo.Pages
     {
         private const double DEFAULT_VOLUME = 0.5;
 
-        private BassLineGenerator _bassLineGenerator = new BassLineGenerator();
+        private BassGenerator _bassLineGenerator = new BassGenerator();
         private EmotionService _emotionService = new EmotionService();
         private SongController _songController;
         private int? _nextIndex;
@@ -80,7 +80,7 @@ namespace IntelligentDemo.Pages
         {
             _nextIndex = index;
             var next = Images[_nextIndex.Value];
-            _songController.SetNextBassBar(_bassLineGenerator.GetBassLine(next.Emotion, 127));
+            _songController.SetNextBassBar(_bassLineGenerator.GetBassMeasure(next.Emotion));
         }
 
         private void DetailsList_SelectionChanged(object sender, SelectionChangedEventArgs e)

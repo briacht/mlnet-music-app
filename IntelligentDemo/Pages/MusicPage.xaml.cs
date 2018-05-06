@@ -1,11 +1,6 @@
-﻿using IntelligentDemo.Convertors;
-using IntelligentDemo.Models;
-using IntelligentDemo.Models.Services;
+﻿using IntelligentDemo.Models.Services;
 using IntelligentDemo.Services;
-using PSAMControlLibrary;
-using PSAMWPFControlLibrary;
-using System;
-using System.Collections.Generic;
+using IntelligentDemo.ViewModels;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,11 +13,11 @@ namespace IntelligentDemo.Pages
         private const double DEFAULT_VOLUME = 0.5;
 
         private SongController _songController;
-        private MelodyService _melodyService = new MelodyService();
+        private MelodyGenerator _melodyGenerator = new MelodyGenerator();
+        private MusicRepairer _musicRepairer = new MusicRepairer();
         private int? _controllerBarWhenPlayStarted;
-        private MeasureInfo[] _measures;
+        private MeasureViewModel[] _measures;
         bool initialized;
-
         bool playing;
 
         public MusicPage(SongController controller)
@@ -38,9 +33,10 @@ namespace IntelligentDemo.Pages
                 initialized = true;
                 VolumeSlider.Value = DEFAULT_VOLUME * 100;
 
-                var data = _melodyService.LoadSong();
-                FixMissingNotes(data);
-                _measures = CreateDisplayMeasures(data);
+                var data = _melodyGenerator.GetMelody();
+                _musicRepairer.Repair(data);
+                _measures = data.Select(m => new MeasureViewModel(m)).ToArray();
+
                 Redraw();
 
                 _songController.BarStarted += _songController_BarStarted;
@@ -114,104 +110,12 @@ namespace IntelligentDemo.Pages
                     MusicPanel.Children.Add(current);
 
                     var grid = new Grid { Width = 40, Height = 100 };
-                    grid.Children.Add(BuildClef());
+                    grid.Children.Add(MeasureViewModel.BuildClef(4, 4));
                     current.Children.Add(grid);
                 }
 
                 current.Children.Add(_measures[i].DisplayGrid);
             }
         }
-
-        private void DetailsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private static MeasureInfo[] CreateDisplayMeasures(IEnumerable<Measure> measures)
-        {
-            var result = new List<MeasureInfo>();
-            foreach (var measure in measures)
-            {
-                var grid = new Grid { Width = CalculateWidth(measure), Height = 100 };
-                grid.Children.Add(BuildVisualMeasure(measure));
-                result.Add(new MeasureInfo
-                {
-                    Measure = measure,
-                    DisplayGrid = grid
-                });
-            }
-
-            return result.ToArray();
-        }
-
-        private static IncipitViewerWPF BuildClef()
-        {
-            var result = new IncipitViewerWPF();
-            result.AddMusicalSymbol(new Clef(ClefType.GClef, 2));
-            result.AddMusicalSymbol(new TimeSignature(TimeSignatureType.Numbers, 4, 4));
-            return result;
-        }
-
-        private static IncipitViewerWPF BuildVisualMeasure(Measure measure)
-        {
-            var result = new IncipitViewerWPF();
-            var symbols = MeasureToPsamSymbolConvertor.Convert(measure);
-            foreach (var symbol in symbols)
-            {
-                result.AddMusicalSymbol(symbol);
-            }
-            result.AddMusicalSymbol(new Barline());
-
-            return result;
-        }
-
-        private static int CalculateWidth(Measure measure)
-        {
-            var width = 0;
-            foreach (var note in measure.Notes)
-            {
-                switch (note.Duration)
-                {
-                    case 16:
-                        width += 50;
-                        break;
-                    case 8:
-                        width += 30;
-                        break;
-                    case 4:
-                        width += 18;
-                        break;
-                    case 2:
-                        width += 15;
-                        break;
-                    default:
-                        width += 14;
-                        break;
-                }
-            }
-
-            // barline
-            width += 17;
-
-            return width;
-        }
-
-        private static void FixMissingNotes(List<Measure> measures)
-        {
-            foreach (var measure in measures)
-            {
-                foreach (var note in measure.Notes.Where(n => n.Note == 0))
-                {
-                    note.IsPredicted = true;
-                    note.Note = 48;
-                }
-            }
-        }
-    }
-
-    public class MeasureInfo
-    {
-        public Measure Measure { get; set; }
-        public Grid DisplayGrid { get; set; }
     }
 }

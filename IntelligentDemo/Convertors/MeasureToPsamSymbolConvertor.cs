@@ -12,7 +12,7 @@ namespace IntelligentDemo.Convertors
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var measure = value as Measure;
+            var measure = value as MusicMeasure;
             if(measure != null)
             {
                 List<MusicalSymbol> s = Convert(measure);
@@ -27,7 +27,7 @@ namespace IntelligentDemo.Convertors
             throw new NotImplementedException();
         }
 
-        public static List<MusicalSymbol> Convert(Measure measure)
+        public static List<MusicalSymbol> Convert(MusicMeasure measure)
         {
             var s = new List<MusicalSymbol>();
             foreach (var note in measure.Notes.OrderBy(n => n.Position))
@@ -38,7 +38,7 @@ namespace IntelligentDemo.Convertors
                     : NoteStemDirection.Up;
 
                 var psamNote = new Note(t.Note, t.Alter, t.Octave, TranslateDuration(note), direction, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Single });
-                if (note.IsPredicted)
+                if (note.IsRepaired)
                 {
                     psamNote.MusicalCharacterColor = System.Drawing.Color.Red;
                 }
@@ -48,7 +48,7 @@ namespace IntelligentDemo.Convertors
             return s;
         }
 
-        private static (string Note, int Alter, int Octave) TranslateNote(NoteCommand note)
+        private static (string Note, int Alter, int Octave) TranslateNote(MusicNote note)
         {
             var octave = note.Note / 12 - 1;
             switch (note.Note % 12)
@@ -82,7 +82,7 @@ namespace IntelligentDemo.Convertors
             }
         }
 
-        private static MusicalSymbolDuration TranslateDuration(NoteCommand note)
+        private static MusicalSymbolDuration TranslateDuration(MusicNote note)
         {
             switch (note.Duration)
             {
