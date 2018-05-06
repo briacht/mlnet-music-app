@@ -46,7 +46,8 @@ namespace IntelligentDemo.Pages
 
                 // Hack: The learner we are using depends on native binaries and they are only
                 //       available on x64. But, the webcam and MIDI approach we are using only
-                //       work on x86. So we 
+                //       work on x86. So we run prediction in a separate process using a json
+                //       file to pass the data.
                 var startInfo = new ProcessStartInfo()
                 {
                     CreateNoWindow = false,

@@ -10,7 +10,7 @@ namespace MusicProcessor
     {
         static void Main(string[] args)
         {
-            var path = @"C:\Users\rowmil\Documents\GitHub\Demo-AIML\IntelligentDemo\bin\x86\Debug\song.json";// args[1];
+            var path = args[0];
 
             var json = File.ReadAllText(path);
             var song = JsonConvert.DeserializeObject<List<MusicMeasure>>(json);

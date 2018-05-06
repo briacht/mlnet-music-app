@@ -18,15 +18,18 @@ namespace IntelligentDemo.Services
 
         public void Repair(List<MusicMeasure> measures)
         {
-            foreach (var measure in measures)
+            foreach(var measure in measures)
             {
-                var knownNotes = measure.Notes.Where(n => n.Note != 0).Select(n => n.Note);
-                var feature = BuildFeature(knownNotes);
-
                 foreach (var note in measure.Notes.Where(n => n.Note == 0))
                 {
-                    var newNote = _model.Predict(feature).Note;
-                    note.Note = Convert(newNote);
+                    var knownNotes = measure.Notes.Where(n => n.Note != 0).Select(n => n.Note);
+                    var feature = BuildFeature(knownNotes);
+
+                    var noteName = _model.Predict(feature).Note;
+                    var noteNumber = ConvertNoteNameToNumber(noteName);
+                    noteNumber = AdjustToMeasureOctave(noteNumber, knownNotes);
+
+                    note.Note = (byte)noteNumber;
                     note.IsRepaired = true;
                 }
             }
@@ -61,34 +64,55 @@ namespace IntelligentDemo.Services
             };
         }
 
-        private byte Convert(string note)
+        private int AdjustToMeasureOctave(int note, IEnumerable<byte> knownNotes)
+        {
+            // Find note within octave that average is in
+            var avg = (int)knownNotes.Select(n => Convert.ToInt32(n)).Average();
+            var octave = avg / 12;
+            var result = octave * 12 + note;
+            
+            // Check if the corresponding note in the octave above/below
+            // is closer to the average
+            if(result - avg > 6)
+            {
+                result -= 12;
+            }
+            else if(avg - result > 6)
+            {
+                result += 12;
+            }
+
+            return result;
+        }
+
+        private int ConvertNoteNameToNumber(string note)
         {
             switch (note)
             {
                 case "C":
-                    return 60;
+                    return 0;
                 case "C#":
-                    return 61;
+                    return 1;
                 case "D":
-                    return 62;
+                    return 2;
                 case "D#":
-                    return 63;
+                    return 3;
                 case "E":
-                    return 64;
+                    return 4;
                 case "F":
-                    return 65;
+                    return 5;
                 case "F#":
-                    return 66;
+                    return 6;
                 case "G":
-                    return 67;
+                    return 7;
                 case "G#":
-                    return 68;
+                    return 8;
                 case "A":
-                    return 69;
+                    return 9;
                 case "A#":
-                    return 70;
+                    return 10;
                 case "B":
-                    return 71;
+                    return 11;
                 default:
                     throw new ArgumentException();
             }

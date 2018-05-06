@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace IntelligentDemo.Models.Services
         {
             var result = LoadJson(@"Services/melody.json");
 
-            var notes = result.SelectMany(m => m.Notes).ToList();
+            var notes = result.Where(r => r.Notes.Count() > 1).SelectMany(m => m.Notes).ToList();
 
             for (int i = 0; i < notes.Count; i++)
             {
@@ -30,46 +31,29 @@ namespace IntelligentDemo.Models.Services
             var midiData = JsonConvert.DeserializeObject<Rootobject>(json);
             var notes = midiData.tracks[1].notes;
 
-            int measureCounter = 4;
-            int i = 0;
+            var measures = notes.Select(n => new { Measure = Math.Floor(n.time / 4), Note = n })
+                 .GroupBy(n => n.Measure)
+                 .OrderBy(m => m.Key);
 
-            List<MusicMeasure> allMeasures = new List<MusicMeasure>();
+            var result = new List<MusicMeasure>();
 
-            List<MusicNote> tempMeasure = new List<MusicNote>();
-
-            while (i < notes.Length)
+            foreach (var bar in measures)
             {
-                float time = notes[i].time;
+                var startTime = bar.Key * 4;
 
-
-                if (time < measureCounter)
+                result.Add(new MusicMeasure
                 {
-                    MusicNote singleNote = new MusicNote();
-
-                    singleNote.Note = (byte)notes[i].midi;
-                    singleNote.Velocity = 127;
-                    singleNote.Position = (byte)((notes[i].time - (measureCounter - 4)) * 4 + 1);
-                    singleNote.Duration = (byte)(notes[i].duration * 4);
-
-                    tempMeasure.Add(singleNote);
-
-                    i++;
-                }
-
-                else
-                {
-                    MusicMeasure measure = new MusicMeasure();
-                    measure.Notes = tempMeasure.OrderBy(n => n.Position);
-                    allMeasures.Add(measure);
-
-                    tempMeasure = new List<MusicNote>();
-                    measureCounter = measureCounter + 4;
-                }
-
+                    Notes = bar.Select(n => new MusicNote
+                    {
+                        Note = (byte)n.Note.midi,
+                        Velocity = 127,
+                        Position = Convert.ToByte((n.Note.time - startTime) * 4 + 1),
+                        Duration = (byte)(n.Note.duration * 4)
+                    }).ToList()
+                });
             }
 
-            return allMeasures;
-
+            return result;
         }
 
         public class Rootobject
