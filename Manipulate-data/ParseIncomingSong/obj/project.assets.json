@@ -1612,11 +1612,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\adugar\\Documents\\ML.NET\\Manipulate-data\\ParseIncomingSong\\ParseIncomingSong.csproj",
+      "projectUniqueName": "C:\\git\\Build 2018 Demos\\Demo-AIML\\Manipulate-data\\ParseIncomingSong\\ParseIncomingSong.csproj",
       "projectName": "ParseIncomingSong",
-      "projectPath": "C:\\Users\\adugar\\Documents\\ML.NET\\Manipulate-data\\ParseIncomingSong\\ParseIncomingSong.csproj",
+      "projectPath": "C:\\git\\Build 2018 Demos\\Demo-AIML\\Manipulate-data\\ParseIncomingSong\\ParseIncomingSong.csproj",
       "packagesPath": "C:\\Users\\adugar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\adugar\\Documents\\ML.NET\\Manipulate-data\\ParseIncomingSong\\obj\\",
+      "outputPath": "C:\\git\\Build 2018 Demos\\Demo-AIML\\Manipulate-data\\ParseIncomingSong\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",

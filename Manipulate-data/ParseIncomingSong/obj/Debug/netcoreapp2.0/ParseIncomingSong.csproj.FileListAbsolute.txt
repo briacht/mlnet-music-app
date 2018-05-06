@@ -9,3 +9,14 @@ C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\net
 C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.AssemblyInfo.cs
 C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.dll
 C:\Users\adugar\Documents\ML.NET\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.pdb
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.deps.json
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.runtimeconfig.json
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.runtimeconfig.dev.json
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.dll
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\bin\Debug\netcoreapp2.0\ParseIncomingSong.pdb
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.csprojResolveAssemblyReference.cache
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.csproj.CoreCompileInputs.cache
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.AssemblyInfoInputs.cache
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.AssemblyInfo.cs
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.dll
+C:\git\Build 2018 Demos\Demo-AIML\Manipulate-data\ParseIncomingSong\obj\Debug\netcoreapp2.0\ParseIncomingSong.pdb

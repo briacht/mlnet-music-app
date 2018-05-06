@@ -6,6 +6,6 @@ namespace ParseIncomingSong
 {
     public class Measure
     {
-        public IEnumerable<NoteCommand> Notes { get; set; }
+        public List<NoteCommand> Notes { get; set; }
     }
 }

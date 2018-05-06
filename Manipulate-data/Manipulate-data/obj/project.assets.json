@@ -3517,11 +3517,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\adugar\\Documents\\ML.NET\\Manipulate-data\\Manipulate-data\\Manipulate-data.csproj",
+      "projectUniqueName": "C:\\git\\Build 2018 Demos\\Demo-AIML\\Manipulate-data\\Manipulate-data\\Manipulate-data.csproj",
       "projectName": "Manipulate-data",
-      "projectPath": "C:\\Users\\adugar\\Documents\\ML.NET\\Manipulate-data\\Manipulate-data\\Manipulate-data.csproj",
+      "projectPath": "C:\\git\\Build 2018 Demos\\Demo-AIML\\Manipulate-data\\Manipulate-data\\Manipulate-data.csproj",
       "packagesPath": "C:\\Users\\adugar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\adugar\\Documents\\ML.NET\\Manipulate-data\\Manipulate-data\\obj\\",
+      "outputPath": "C:\\git\\Build 2018 Demos\\Demo-AIML\\Manipulate-data\\Manipulate-data\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
