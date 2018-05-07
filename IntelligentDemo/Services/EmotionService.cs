@@ -25,13 +25,7 @@ namespace IntelligentDemo.Services
             {
                 using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    var result = await _faceAPI.Face.DetectWithStreamAsync(stream, returnFaceAttributes: _attributes);
-
-                    if (result.Any())
-                    {
-                        var emotion = result.First().FaceAttributes.Emotion;
-                        return GetPrimaryEmotion(emotion);
-                    }
+                    // TODO Implement emotion detection
 
                     return "No face detected";
                 }

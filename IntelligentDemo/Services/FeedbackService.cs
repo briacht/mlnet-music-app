@@ -26,14 +26,7 @@ namespace IntelligentDemo.Services
         {
             var data = await LoadFeedback();
 
-            var inputs = data.Select(f => new MultiLanguageInput("en", f.Id, f.Text)).ToList();
-
-            var result = await _textAnalyticsAPI.SentimentAsync(new MultiLanguageBatchInput(inputs));
-
-            foreach (var document in result.Documents)
-            {
-                data.Single(f => f.Id == document.Id).Score = document.Score;
-            }
+            // TODO Implement sentiment detection
 
             return data;
         }

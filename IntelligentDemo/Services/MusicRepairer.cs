@@ -24,12 +24,9 @@ namespace IntelligentDemo.Services
                 {
                     var knownNotes = measure.Notes.Where(n => n.Note != 0).Select(n => n.Note);
 
-                    var feature = BuildFeature(knownNotes);
-                    var noteName = _model.Predict(feature).Note;
-                    var noteNumber = ConvertNoteNameToNumber(noteName);
-                    noteNumber = AdjustToMeasureOctave(noteNumber, knownNotes);
+                    // TODO Implement note prediction
+                    note.Note = 48;
 
-                    note.Note = (byte)noteNumber;
                     note.IsRepaired = true;
                 }
             }
