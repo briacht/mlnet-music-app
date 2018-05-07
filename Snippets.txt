@@ -1,0 +1,34 @@
+// DEMO 1
+
+var model = LoadModel();
+var feature = BuildFeature(knownNotes);
+var noteName = model.Predict(feature).Note;
+var noteNumber = ConvertNoteNameToNumber(noteName);
+note.Note = AdjustToMeasureOctave(noteNumber, knownNotes);
+
+
+
+// DEMO 2
+
+var inputs = data.Select(f => new MultiLanguageInput("en", f.Id, f.Text)).ToList();
+
+var result = await _textAnalyticsAPI.SentimentAsync(new MultiLanguageBatchInput(inputs));
+
+foreach (var document in result.Documents)
+{
+    data.Single(f => f.Id == document.Id).Score = document.Score;
+}
+
+
+
+
+
+// DEMO 3
+
+var result = await _faceAPI.Face.DetectWithStreamAsync(stream, returnFaceAttributes: _attributes);
+
+if (result.Any())
+{
+    var emotion = result.First().FaceAttributes.Emotion;
+    return GetPrimaryEmotion(emotion);
+}
