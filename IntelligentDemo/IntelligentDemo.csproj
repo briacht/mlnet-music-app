@@ -348,7 +348,10 @@
     <None Include="secrets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Services\melody.json">
+    <None Include="Services\melody-damaged.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Services\melody-very-damaged.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Services\MusicModel.zip">

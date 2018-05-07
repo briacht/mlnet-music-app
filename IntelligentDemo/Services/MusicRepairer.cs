@@ -23,8 +23,8 @@ namespace IntelligentDemo.Services
                 foreach (var note in measure.Notes.Where(n => n.Note == 0))
                 {
                     var knownNotes = measure.Notes.Where(n => n.Note != 0).Select(n => n.Note);
-                    var feature = BuildFeature(knownNotes);
 
+                    var feature = BuildFeature(knownNotes);
                     var noteName = _model.Predict(feature).Note;
                     var noteNumber = ConvertNoteNameToNumber(noteName);
                     noteNumber = AdjustToMeasureOctave(noteNumber, knownNotes);
