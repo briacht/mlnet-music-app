@@ -19,4 +19,10 @@
     <PackageReference Include="Microsoft.ML" Version="0.1.0-preview-26503-9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="chorales-modified.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

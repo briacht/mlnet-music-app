@@ -13,7 +13,7 @@ namespace Manipulate_data
     {
         static void Main(string[] args)
         {
-            List<string> rawData = ReadInCSV("C:/Users/adugar/Documents/ML.NET/Manipulate-data/Manipulate-data/Data/chorales.csv");
+            List<string> rawData = ReadInCSV("Data/chorales.csv");
             List<string> cleanData = CleanData(rawData);
             DataTable noteData = SplitChorales(cleanData);
             DataTable measureData = ConsolidateMeasureData(noteData);
