@@ -65,9 +65,6 @@ namespace IntelligentDemo.Pages
                 json = File.ReadAllText(path);
                 data = JsonConvert.DeserializeObject<List<MusicMeasure>>(json);
 
-                data.SelectMany(m => m.Notes.Where(n => n.Note == 0)).ToList()
-                    .ForEach(n => n.Note = 45);
-
                 _measures = data.Select(m => new MeasureViewModel(m)).ToArray();
                 Redraw();
 
