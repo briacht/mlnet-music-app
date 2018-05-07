@@ -139,10 +139,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\IntelligentDemo\Services\MusicModel.zip">
-      <Link>Services\MusicModel.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

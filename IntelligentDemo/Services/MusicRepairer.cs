@@ -9,13 +9,6 @@ namespace IntelligentDemo.Services
 {
     public class MusicRepairer
     {
-        private PredictionModel<MusicNotes, MusicNotesPrediction> _model;
-
-        public MusicRepairer()
-        {
-            _model = PredictionModel.ReadAsync<MusicNotes, MusicNotesPrediction>("Services/MusicModel.zip").Result;
-        }
-
         public void Repair(List<MusicMeasure> measures)
         {
             foreach(var measure in measures)
@@ -24,10 +17,11 @@ namespace IntelligentDemo.Services
                 {
                     var knownNotes = measure.Notes.Where(n => n.Note != 0).Select(n => n.Note);
 
+                    var model = LoadModel();
                     var feature = BuildFeature(knownNotes);
-                    var noteName = _model.Predict(feature).Note;
+                    var noteName = model.Predict(feature).Note;
                     var noteNumber = ConvertNoteNameToNumber(noteName);
-                    note.Note = AdjustToMeasureOctave(noteNumber, knownNotes); ;
+                    note.Note = AdjustToMeasureOctave(noteNumber, knownNotes);
 
                     note.IsRepaired = true;
                 }
@@ -115,6 +109,11 @@ namespace IntelligentDemo.Services
                 default:
                     throw new ArgumentException();
             }
+        }
+
+        private PredictionModel<MusicNotes, MusicNotesPrediction> LoadModel()
+        {
+            return PredictionModel.ReadAsync<MusicNotes, MusicNotesPrediction>("../../../../IntelligentDemo/Services/MusicModel.zip").Result;
         }
 
         class MusicNotes
