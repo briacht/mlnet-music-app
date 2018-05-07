@@ -9,8 +9,8 @@ namespace Microsoft.ML.MusicNotesPrediction
 {
     class Program
     {
-        const string dataPath = @"E:\ML.Net\music_cat\MusicNotesPrediction\Data\chorales-modified.csv";
-        const string modelPath = @"E:\ML.Net\music_cat\MusicNotesPrediction\Data\Model.zip";
+        const string dataPath = @"chorales-modified.csv";
+        const string modelPath = @"MusicModel.zip";
 
         static void Main(string[] args)
         {
@@ -53,6 +53,8 @@ namespace Microsoft.ML.MusicNotesPrediction
             pipeline.Add(new PredictedLabelColumnOriginalValueConverter() { PredictedLabelColumn = "PredictedLabel" });
 
             PredictionModel<MusicNotes, MusicNotesPrediction> model = pipeline.Train<MusicNotes, MusicNotesPrediction>();
+
+            model.WriteAsync(modelPath);
 
             MusicNotes note = new MusicNotes
             {

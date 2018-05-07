@@ -11,8 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="chorales-modified.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Data\chorales.csv">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
