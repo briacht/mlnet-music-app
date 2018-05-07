@@ -27,9 +27,8 @@ namespace IntelligentDemo.Services
                     var feature = BuildFeature(knownNotes);
                     var noteName = _model.Predict(feature).Note;
                     var noteNumber = ConvertNoteNameToNumber(noteName);
-                    noteNumber = AdjustToMeasureOctave(noteNumber, knownNotes);
+                    note.Note = AdjustToMeasureOctave(noteNumber, knownNotes); ;
 
-                    note.Note = (byte)noteNumber;
                     note.IsRepaired = true;
                 }
             }
@@ -64,7 +63,7 @@ namespace IntelligentDemo.Services
             };
         }
 
-        private int AdjustToMeasureOctave(int note, IEnumerable<byte> knownNotes)
+        private byte AdjustToMeasureOctave(int note, IEnumerable<byte> knownNotes)
         {
             // Find note within octave that average is in
             var avg = (int)knownNotes.Select(n => Convert.ToInt32(n)).Average();
@@ -82,7 +81,7 @@ namespace IntelligentDemo.Services
                 result += 12;
             }
 
-            return result;
+            return (byte)result;
         }
 
         private int ConvertNoteNameToNumber(string note)
