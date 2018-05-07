@@ -56,52 +56,52 @@
       <HintPath>..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.Api.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.Api.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.Core.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.CpuMath, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.CpuMath.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.CpuMath.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.Data.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.FastTree, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.FastTree.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.FastTree.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.InternalStreams, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.InternalStreams.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.InternalStreams.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.KMeansClustering, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.KMeansClustering.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.KMeansClustering.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.Maml, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.Maml.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.Maml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.PCA, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.PCA.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.PCA.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.PipelineInference, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.PipelineInference.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.PipelineInference.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.ResultProcessor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.ResultProcessor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.ResultProcessor.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.StandardLearners, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.StandardLearners.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.StandardLearners.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.Sweeper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.Sweeper.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.Sweeper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.Transforms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.Transforms.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.Transforms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.UniversalModelFormat, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ML.0.1.0-preview-26505-1\lib\netstandard2.0\Microsoft.ML.UniversalModelFormat.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ML.0.1.0\lib\netstandard2.0\Microsoft.ML.UniversalModelFormat.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -139,10 +139,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\IntelligentDemo\Services\MusicModel.zip">
-      <Link>Services\MusicModel.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
