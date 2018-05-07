@@ -20,6 +20,10 @@ namespace IntelligentDemo.Services
                     // TODO Implement note prediction
 
 
+
+
+                    
+
                     note.IsRepaired = true;
                 }
             }

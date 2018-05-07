@@ -11,12 +11,10 @@ namespace IntelligentDemo.Services
     class EmotionService
     {
         private FaceAPI _faceAPI;
-        private IList<FaceAttributeType> _attributes;
 
         public EmotionService()
         {
             _faceAPI = new FaceAPI(new ApiKeyServiceClientCredentials(App.Secrets.FaceApiKey));
-            _attributes = new[] { FaceAttributeType.Emotion };
         }
 
         public async Task<string> DetectEmotionFromFile(string file)
@@ -26,6 +24,10 @@ namespace IntelligentDemo.Services
                 using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     // TODO Implement emotion detection
+
+
+
+
 
                     return "No face detected";
                 }
@@ -41,7 +43,8 @@ namespace IntelligentDemo.Services
         {
             try
             {
-                var result = await _faceAPI.Face.DetectWithUrlAsync(url, returnFaceAttributes: _attributes);
+                var attributes = new[] { FaceAttributeType.Emotion };
+                var result = await _faceAPI.Face.DetectWithUrlAsync(url, returnFaceAttributes: attributes);
 
                 if (result.Any())
                 {

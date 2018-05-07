@@ -46,6 +46,7 @@ namespace IntelligentDemo.Pages
 
                 DetailsList.ItemsSource = Tweets;
                 VolumeSlider.Value = DEFAULT_VOLUME * 100;
+                HashTagDisplay.Text = HASHTAG;
 
                 LoadTestTweets();
                 await LoadRecentTweets();

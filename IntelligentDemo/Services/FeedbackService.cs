@@ -28,10 +28,14 @@ namespace IntelligentDemo.Services
 
             // TODO Implement sentiment detection
 
-            return data;
+
+
+
+
+            return data.Values;
         }
 
-        private async Task<IEnumerable<Feedback>> LoadFeedback()
+        private async Task<Dictionary<string, Feedback>> LoadFeedback()
         {
             var data = await Task.Run(() => File.ReadAllText("Feedback.json"));
             var result = JsonConvert.DeserializeObject<Feedback[]>(data);
@@ -41,7 +45,7 @@ namespace IntelligentDemo.Services
                 result[i].Id = i.ToString();
             }
 
-            return result;
+            return result.ToDictionary(f => f.Id);
         }
     }
 }
