@@ -17,11 +17,14 @@ namespace IntelligentDemo.Services
                 {
                     var knownNotes = measure.Notes.Where(n => n.Note != 0).Select(n => n.Note);
 
-                    var model = LoadModel();
                     var feature = BuildFeature(knownNotes);
+
+                    var model = LoadModel();
                     var noteName = model.Predict(feature).Note;
+
                     var noteNumber = ConvertNoteNameToNumber(noteName);
-                    note.Note = AdjustToMeasureOctave(noteNumber, knownNotes);
+                    var finalNote = AdjustToMeasureOctave(noteNumber, knownNotes);
+                    note.Note = finalNote;
 
                     note.IsRepaired = true;
                 }

@@ -55,7 +55,7 @@
                             </StackPanel>
                         </Grid>
 
-                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="16px" Text="{Binding Text}"></TextBlock>
+                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" TextWrapping="Wrap" FontSize="18px" Text="{Binding Text}"></TextBlock>
 
                     </DockPanel>
                 </Border>

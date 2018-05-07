@@ -26,19 +26,19 @@ namespace IntelligentDemo.Services
         {
             var data = await LoadFeedback();
 
-            var inputs = data.Select(f => new MultiLanguageInput("en", f.Id, f.Text)).ToList();
+            var inputs = data.Select(f => new MultiLanguageInput("en", f.Key, f.Value.Text)).ToList();
 
             var result = await _textAnalyticsAPI.SentimentAsync(new MultiLanguageBatchInput(inputs));
 
             foreach (var document in result.Documents)
             {
-                data.Single(f => f.Id == document.Id).Score = document.Score;
+                data[document.Id].Score = document.Score;
             }
 
-            return data;
+            return data.Values;
         }
 
-        private async Task<IEnumerable<Feedback>> LoadFeedback()
+        private async Task<Dictionary<string, Feedback>> LoadFeedback()
         {
             var data = await Task.Run(() => File.ReadAllText("Feedback.json"));
             var result = JsonConvert.DeserializeObject<Feedback[]>(data);
@@ -48,7 +48,7 @@ namespace IntelligentDemo.Services
                 result[i].Id = i.ToString();
             }
 
-            return result;
+            return result.ToDictionary(f => f.Id);
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -31,7 +32,7 @@ namespace IntelligentDemo.Pages
             _songController = controller;
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (!initialized)
             {
@@ -50,17 +51,14 @@ namespace IntelligentDemo.Pages
                 //       file to pass the data.
                 var startInfo = new ProcessStartInfo()
                 {
-                    CreateNoWindow = false,
+                    CreateNoWindow = true,
                     UseShellExecute = false,
                     FileName = @"..\..\..\..\MusicProcessor\bin\x64\Debug\MusicProcessor.exe",
                     Arguments = $"\"{path}\"",
                     WindowStyle = ProcessWindowStyle.Hidden,
                 };
 
-                using (var process = Process.Start(startInfo))
-                {
-                    process.WaitForExit();
-                }
+                await Task.Run(() => Process.Start(startInfo).WaitForExit());
 
                 json = File.ReadAllText(path);
                 data = JsonConvert.DeserializeObject<List<MusicMeasure>>(json);

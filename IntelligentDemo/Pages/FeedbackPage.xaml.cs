@@ -93,8 +93,10 @@ namespace IntelligentDemo.Pages
             if(!enabled)
             {
                 enabled = true;
-                EnableButton.Background = new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10));
                 SetColorForCurrent();
+                EnableButton.Background = _lightController.IsConnected
+                    ? new SolidColorBrush(Color.FromRgb(0x10, 0x7c, 0x10))
+                    : new SolidColorBrush(Color.FromRgb(0xd8, 0x3b, 0x01));
             }
             else
             {
