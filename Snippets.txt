@@ -1,34 +1,42 @@
-// DEMO 1
+Demo 1: Input
+                    var feature = BuildFeature(knownNotes);
 
-var model = LoadModel();
-var feature = BuildFeature(knownNotes);
-var noteName = model.Predict(feature).Note;
-var noteNumber = ConvertNoteNameToNumber(noteName);
-note.Note = AdjustToMeasureOctave(noteNumber, knownNotes);
+Demo 1: API Call
+                    var model = LoadModel();
+                    var noteName = model.Predict(feature).Note;
 
-
-
-// DEMO 2
-
-var inputs = data.Select(f => new MultiLanguageInput("en", f.Id, f.Text)).ToList();
-
-var result = await _textAnalyticsAPI.SentimentAsync(new MultiLanguageBatchInput(inputs));
-
-foreach (var document in result.Documents)
-{
-    data.Single(f => f.Id == document.Id).Score = document.Score;
-}
+Demo 1: Results
+                    var noteNumber = ConvertNoteNameToNumber(noteName);
+                    var finalNote = AdjustToMeasureOctave(noteNumber, knownNotes);
+                    note.Note = finalNote;
 
 
+Demo 2: Input
+            var inputs = data.Select(f => new MultiLanguageInput("en", f.Key, f.Value.Text)).ToList();
+
+Demo 2: API Call
+            var result = await _textAnalyticsAPI.SentimentAsync(new MultiLanguageBatchInput(inputs));
+
+Demo 2: Results
+            foreach (var document in result.Documents)
+            {
+                data[document.Id].Score = document.Score;
+            }
 
 
+Demo 3: Input
+                    var attributes = new[] { FaceAttributeType.Emotion };
 
-// DEMO 3
+Demo 3: API Call
+                    var result = await _faceAPI.Face.DetectWithStreamAsync(stream, returnFaceAttributes: attributes);
 
-var result = await _faceAPI.Face.DetectWithStreamAsync(stream, returnFaceAttributes: _attributes);
-
-if (result.Any())
-{
-    var emotion = result.First().FaceAttributes.Emotion;
-    return GetPrimaryEmotion(emotion);
-}
+Demo 3: Results
+                    if (result.Any())
+                    {
+                        var emotion = result.First().FaceAttributes.Emotion;
+                        return GetPrimaryEmotion(emotion);
+                    }
+                    else
+                    {
+                        return "No face detected";
+                    }
