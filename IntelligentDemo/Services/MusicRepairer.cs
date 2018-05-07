@@ -9,6 +9,13 @@ namespace IntelligentDemo.Services
 {
     public class MusicRepairer
     {
+        private string _modelPath;
+
+        public MusicRepairer(string modelPath)
+        {
+            _modelPath = modelPath;
+        }
+
         public void Repair(List<MusicMeasure> measures)
         {
             foreach(var measure in measures)
@@ -114,7 +121,7 @@ namespace IntelligentDemo.Services
 
         private PredictionModel<MusicNotes, MusicNotesPrediction> LoadModel()
         {
-            return PredictionModel.ReadAsync<MusicNotes, MusicNotesPrediction>("../../../../IntelligentDemo/Services/MusicModel.zip").Result;
+            return PredictionModel.ReadAsync<MusicNotes, MusicNotesPrediction>(_modelPath).Result;
         }
 
         class MusicNotes

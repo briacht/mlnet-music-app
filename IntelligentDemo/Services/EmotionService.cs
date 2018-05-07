@@ -24,19 +24,14 @@ namespace IntelligentDemo.Services
                 using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     // TODO Implement emotion detection
+                    return "Analysis not implemented";
 
-
-
-
-
-                    return "No face detected";
                 }
             }
             catch (Exception)
             {
                 return "API error";
             }
-
         }
 
         public async Task<string> DetectEmotionFromUrl(string url)
