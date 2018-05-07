@@ -31,15 +31,16 @@ namespace IntelligentDemo.Services
                         var emotion = result.First().FaceAttributes.Emotion;
                         return GetPrimaryEmotion(emotion);
                     }
-
-                    return "No face detected";
+                    else
+                    {
+                        return "No face detected";
+                    }
                 }
             }
             catch (Exception)
             {
                 return "API error";
             }
-
         }
 
         public async Task<string> DetectEmotionFromUrl(string url)
