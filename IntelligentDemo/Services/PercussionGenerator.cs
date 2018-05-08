@@ -26,48 +26,66 @@ namespace IntelligentDemo.Services
 
             result["anger"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 36, Duration = 16, Velocity = 127, Position = 1},
+                new MusicNote{ Note = 41, Duration = 4, Velocity = 127, Position = 1},
+                new MusicNote{ Note = 41, Duration = 4, Velocity = 127, Position = 5},
+                new MusicNote{ Note = 55, Duration = 8, Velocity = 127, Position = 9},
             };
 
             result["contempt"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
-                new MusicNote{ Note = 36, Duration = 4, Velocity = 100, Position = 5},
-                new MusicNote{ Note = 36, Duration = 4, Velocity = 127, Position = 9},
-                new MusicNote{ Note = 36, Duration = 4, Velocity = 100, Position = 13},
+                new MusicNote{ Note = 41, Duration = 4, Velocity = 127, Position = 1},
+                new MusicNote{ Note = 41, Duration = 4, Velocity = 127, Position = 5},
+                new MusicNote{ Note = 55, Duration = 8, Velocity = 127, Position = 9},
             };
 
             result["disgust"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 40, Duration = 4, Velocity = 127, Position = 1},
-                new MusicNote{ Note = 38, Duration = 4, Velocity = 127, Position = 5},
-                new MusicNote{ Note = 36, Duration = 8, Velocity = 127, Position = 9},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 1},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 3},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 5},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 7},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 9},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 10},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 11},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 12},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 13},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 14 },
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 15},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 16},
             };
 
             result["fear"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 1},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 3},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 5},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 7},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 9},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 11},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 13},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 15},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 1},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 3},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 5},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 7},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 9},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 10},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 11},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 12},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 13},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 14 },
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 15},
+                new MusicNote{ Note = 38, Duration = 1, Velocity = 100, Position = 16},
             };
 
             result["happiness"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 48, Duration = 4, Velocity = 127, Position = 1},
-                new MusicNote{ Note = 50, Duration = 4, Velocity = 127, Position = 5},
-                new MusicNote{ Note = 48, Duration = 4, Velocity = 127, Position = 9},
-                new MusicNote{ Note = 50, Duration = 4, Velocity = 127, Position = 13},
+                new MusicNote{ Note = 76, Duration = 2, Velocity = 127, Position = 1},
+                new MusicNote{ Note = 76, Duration = 2, Velocity = 127, Position = 3},
+                new MusicNote{ Note = 53, Duration = 4, Velocity = 127, Position = 5},
+                new MusicNote{ Note = 76, Duration = 2, Velocity = 127, Position = 9},
+                new MusicNote{ Note = 76, Duration = 2, Velocity = 127, Position = 11},
+                new MusicNote{ Note = 54, Duration = 4, Velocity = 127, Position = 13},
             };
 
             result["neutral"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 48, Duration = 8, Velocity = 127, Position = 1},
-                new MusicNote{ Note = 48, Duration = 8, Velocity = 127, Position = 9},
+                new MusicNote{ Note = 56, Duration = 4, Velocity = 127, Position = 1},
+                new MusicNote{ Note = 56, Duration = 4, Velocity = 127, Position = 5},
+                new MusicNote{ Note = 56, Duration = 4, Velocity = 127, Position = 9},
+                new MusicNote{ Note = 56, Duration = 4, Velocity = 127, Position = 13},
             };
 
             result["sadness"] = new List<MusicNote>
@@ -78,9 +96,11 @@ namespace IntelligentDemo.Services
 
             result["surprise"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 38, Duration = 4, Velocity = 127, Position = 1},
-                new MusicNote{ Note = 38, Duration = 4, Velocity = 127, Position = 5},
-                new MusicNote{ Note = 60, Duration = 8, Velocity = 127, Position = 9},
+                new MusicNote{ Note = 40, Duration = 1, Velocity = 100, Position = 1},
+                new MusicNote{ Note = 40, Duration = 1, Velocity = 100, Position = 3},
+                new MusicNote{ Note = 40, Duration = 1, Velocity = 100, Position = 5},
+                new MusicNote{ Note = 40, Duration = 1, Velocity = 100, Position = 7},
+                new MusicNote{ Note = 55, Duration = 1, Velocity = 100, Position = 9},
             };
 
             return result;
