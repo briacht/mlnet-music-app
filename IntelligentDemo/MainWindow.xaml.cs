@@ -131,5 +131,10 @@ namespace IntelligentDemo
                 }
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            TogglePage(_musicPage.Value);
+        }
     }
 }

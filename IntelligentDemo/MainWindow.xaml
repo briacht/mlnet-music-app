@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         WindowState="Maximized"
+        Loaded="Window_Loaded"
         Title=".NET AI Showcase" Height="450" Width="800">
     <Grid>
         <DockPanel LastChildFill="True">
-            <Grid DockPanel.Dock="Bottom" Height="40" Background="#a6a6a6">
+            <Grid DockPanel.Dock="Bottom" Height="40" Background="#a6a6a6" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Button Height="20" Width="50" Margin="5" FontSize="10px" Name="Music" Click="Music_Click">Music</Button>
                     <Button Height="20" Width="50" Margin="5" FontSize="10px" Name="Feedback" Click="Feedback_Click">Feedback</Button>
