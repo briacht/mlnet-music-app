@@ -17,6 +17,7 @@ namespace IntelligentDemo.Services
     {
         private static byte BASS_CHANNEL = 0;
         private static byte MELODY_CHANNEL = 1;
+        private static byte UNKNOWN_NOTE_CHANNEL = 2;
         private static byte PERCUSSION_CHANNEL = 9;
         private static int SIXTEENTHS_PER_BAR = 16;
 
@@ -37,6 +38,7 @@ namespace IntelligentDemo.Services
             _midi = new MidiWrapper();
             _midi.SelectInstrument(BASS_CHANNEL, 37);
             _midi.SelectInstrument(MELODY_CHANNEL, 1);
+            _midi.SelectInstrument(UNKNOWN_NOTE_CHANNEL, 124);
 
             _carryOver = new List<Action<MidiWrapper>>[SIXTEENTHS_PER_BAR];
             for (int i = 0; i < _carryOver.Length; i++)
@@ -116,15 +118,23 @@ namespace IntelligentDemo.Services
             {
                 foreach (var note in _nextMelodyBar)
                 {
-                    commands[note.Position - 1].Add(m => m.NoteOn(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
+                    var number = note.Note == 0
+                        ? (byte)60
+                        : note.Note;
+
+                    var channel = note.Note == 0
+                        ? UNKNOWN_NOTE_CHANNEL
+                        : MELODY_CHANNEL;
+
+                    commands[note.Position - 1].Add(m => m.NoteOn(channel, number, Convert.ToByte(note.Velocity * _melodyVolume)));
                     var off = (note.Position - 1) + note.Duration;
                     if (off < SIXTEENTHS_PER_BAR)
                     {
-                        commands[off].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
+                        commands[off].Add(m => m.NoteOff(channel, number, Convert.ToByte(note.Velocity * _melodyVolume)));
                     }
                     else
                     {
-                        _carryOver[off - SIXTEENTHS_PER_BAR].Add(m => m.NoteOff(MELODY_CHANNEL, note.Note, Convert.ToByte(note.Velocity * _melodyVolume)));
+                        _carryOver[off - SIXTEENTHS_PER_BAR].Add(m => m.NoteOff(channel, number, Convert.ToByte(note.Velocity * _melodyVolume)));
                     }
                 }
             }
