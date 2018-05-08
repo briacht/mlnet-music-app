@@ -12,6 +12,7 @@ using System.Windows.Threading;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
+using Tweetinvi.Streaming;
 
 namespace IntelligentDemo.Pages
 {
@@ -21,7 +22,7 @@ namespace IntelligentDemo.Pages
     public partial class TwitterPage : UserControl, IDisposable
     {
         private const double DEFAULT_VOLUME = 0.75;
-        private const string HASHTAG = "#mldemotest";
+        private const string HASHTAG = "#mlnetdemo";
 
         private ConcurrentQueue<Models.Tweet> _tweetQueue = new ConcurrentQueue<Models.Tweet>();
         private DispatcherTimer _tweetQueueTimer;
@@ -67,6 +68,7 @@ namespace IntelligentDemo.Pages
                     ProcessTweetQueue();
                     _tweetQueueTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
                     _tweetQueueTimer.Tick += (_, __) => ProcessTweetQueue();
+                    _tweetQueueTimer.Start();
                 }
 
                 _songController.BarStarted += Controller_BarStarted;
@@ -105,12 +107,14 @@ namespace IntelligentDemo.Pages
             }
         }
 
-        private void ConnectToTwitterStream()
+        private IFilteredStream _twitterStream;
+        private async Task ConnectToTwitterStream()
         {
             var stream = Stream.CreateFilteredStream();
             stream.AddTrack(HASHTAG);
             stream.MatchingTweetReceived += async (s, e) => await ProcessIncomingTweet(e.Tweet);
-            _streamTask = stream.StartStreamMatchingAllConditionsAsync();
+            _twitterStream = stream;
+            await stream.StartStreamMatchingAllConditionsAsync();
         }
 
         private async Task ProcessIncomingTweet(ITweet tweet)
