@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="chorales-modified.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\chorales.csv">
+    <None Update="chorales.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

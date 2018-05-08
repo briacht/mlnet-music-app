@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,18 +10,108 @@ using System.Text.RegularExpressions;
 
 namespace Manipulate_data
 {
+    public class NoteData
+    {
+        public int NoteNumber { get; set; }
+        public int KeySignature { get; set; }
+        public int Note0_Present { get; set; }
+        public int Note1_Present { get; set; }
+        public int Note2_Present { get; set; }
+        public int Note3_Present { get; set; }
+        public int Note4_Present { get; set; }
+        public int Note5_Present { get; set; }
+        public int Note6_Present { get; set; }
+        public int Note7_Present { get; set; }
+        public int Note8_Present { get; set; }
+        public int Note9_Present { get; set; }
+        public int Note10_Present { get; set; }
+        public int Note11_Present { get; set; }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            List<string> rawData = ReadInCSV("Data/chorales.csv");
-            List<string> cleanData = CleanData(rawData);
-            DataTable noteData = SplitChorales(cleanData);
-            DataTable measureData = ConsolidateMeasureData(noteData);
-            DataTable finalTable = GetFinalTable(measureData);
-            GetFinalCSV(finalTable, "chorales-modified.csv");
+            var inputPath = "chorales.csv";
+            var outputPath = "chorales-modified.csv";
 
-            //GetMinMax(noteData);
+            var data = File.ReadLines(inputPath)
+                .Where(s => !s.StartsWith(",,,"));
+
+            var result = new List<NoteData>();
+            foreach (var song in data)
+            {
+                var values = song.Split(',').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                var chorale = values[0];
+
+                var notes = new List<NoteTemp>();
+                Debug.Assert(values.Length % 6 == 1, "Expect groups of 8 values plus song number");
+                for (int i = 1; i < values.Length; i += 6)
+                {
+                    Debug.Assert(values[i].StartsWith("st "));
+                    var start = Convert.ToInt32(values[i].Replace("st ", ""));
+
+                    Debug.Assert(values[i + 1].StartsWith("pitch "));
+                    var note = Convert.ToInt32(values[i + 1].Replace("pitch ", ""));
+
+                    Debug.Assert(values[i + 2].StartsWith("dur "));
+                    var duration = Convert.ToInt32(values[i + 2].Replace("dur ", ""));
+
+                    Debug.Assert(values[i + 3].StartsWith("keysig "));
+                    var keySignature = Convert.ToInt32(values[i + 3].Replace("keysig ", ""));
+
+                    Debug.Assert(values[i + 4].StartsWith("timesig "));
+                    var timeSignature = Convert.ToInt32(values[i + 4].Replace("timesig ", ""));
+
+                    notes.Add(new NoteTemp
+                    {
+                        Note = note % 12,
+                        KeySignature = keySignature,
+                        Measure = start % timeSignature
+                    });
+                }
+
+                var measures = notes.GroupBy(n => n.Measure);
+                foreach (var measure in measures)
+                {
+                    foreach (var note in measure)
+                    {
+                        var otherNotes = measure.Where(n => n != note).Select(n => n.Note);
+                        result.Add(new NoteData
+                        {
+                            NoteNumber = note.Note,
+                            KeySignature = note.KeySignature,
+                            Note0_Present = measure.Any(n => n.Note == 0) ? 1 : 0,
+                            Note1_Present = measure.Any(n => n.Note == 1) ? 1 : 0,
+                            Note2_Present = measure.Any(n => n.Note == 2) ? 1 : 0,
+                            Note3_Present = measure.Any(n => n.Note == 3) ? 1 : 0,
+                            Note4_Present = measure.Any(n => n.Note == 4) ? 1 : 0,
+                            Note5_Present = measure.Any(n => n.Note == 5) ? 1 : 0,
+                            Note6_Present = measure.Any(n => n.Note == 6) ? 1 : 0,
+                            Note7_Present = measure.Any(n => n.Note == 7) ? 1 : 0,
+                            Note8_Present = measure.Any(n => n.Note == 8) ? 1 : 0,
+                            Note9_Present = measure.Any(n => n.Note == 9) ? 1 : 0,
+                            Note10_Present = measure.Any(n => n.Note == 10) ? 1 : 0,
+                            Note11_Present = measure.Any(n => n.Note == 11) ? 1 : 0,
+                        });
+                    }
+                }
+            }
+
+
+            //List<string> rawData = ReadInCSV(inputPath);
+            //List<string> cleanData = CleanData(rawData);
+            //DataTable noteData = SplitChorales(cleanData);
+            //DataTable measureData = ConsolidateMeasureData(noteData);
+            //DataTable finalTable = GetFinalTable(measureData);
+            //ProduceFinalCSV(finalTable, outputPath);
+        }
+
+        public class NoteTemp
+        {
+            public int Measure { get; set; }
+            public int Note { get; set; }
+            public int KeySignature { get; set; }
         }
 
         public static List<string> ReadInCSV(string absolutePath)
@@ -41,7 +132,6 @@ namespace Manipulate_data
             }
             return result;
         }
-
 
         public static List<string> CleanData(List<string> messyData)
         {
@@ -482,8 +572,7 @@ namespace Manipulate_data
             int choraleNext = 1;
         }
 
-
-        public static void GetFinalCSV(DataTable finalTable, string fileName)
+        public static void ProduceFinalCSV(DataTable finalTable, string fileName)
         {
             StringBuilder sb = new StringBuilder();
 
