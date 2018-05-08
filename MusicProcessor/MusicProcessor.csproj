@@ -135,6 +135,12 @@
     <Compile Include="..\IntelligentDemo\Services\MusicRepairer.cs">
       <Link>Services\MusicRepairer.cs</Link>
     </Compile>
+    <Compile Include="..\MusicModel\NotePredictionInput.cs">
+      <Link>Models\NotePredictionInput.cs</Link>
+    </Compile>
+    <Compile Include="..\MusicModel\PredictedNote.cs">
+      <Link>Models\PredictedNote.cs</Link>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

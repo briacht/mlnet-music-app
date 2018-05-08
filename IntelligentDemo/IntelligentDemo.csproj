@@ -256,6 +256,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\MusicModel\NotePredictionInput.cs">
+      <Link>Models\NotePredictionInput.cs</Link>
+    </Compile>
+    <Compile Include="..\MusicModel\PredictedNote.cs">
+      <Link>Models\PredictedNote.cs</Link>
+    </Compile>
     <Compile Include="ViewModels\MeasureViewModel.cs" />
     <Page Include="Pages\CameraPage.xaml">
       <SubType>Designer</SubType>
@@ -340,6 +346,7 @@
     <None Include="Feedback.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="MusicModel.zip" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -286,7 +286,7 @@
   {
     "Notes": [
       {
-        "Note": 0,
+        "Note": 64,
         "Velocity": 127,
         "Position": 1,
         "Duration": 6,
@@ -300,7 +300,7 @@
         "IsRepaired": false
       },
       {
-        "Note": 69,
+        "Note": 0,
         "Velocity": 127,
         "Position": 9,
         "Duration": 4,
