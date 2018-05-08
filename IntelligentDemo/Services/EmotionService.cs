@@ -23,18 +23,16 @@ namespace IntelligentDemo.Services
             {
                 using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    var attributes = new[] { FaceAttributeType.Emotion };
-                    var result = await _faceAPI.Face.DetectWithStreamAsync(stream, returnFaceAttributes: attributes);
+                    // TODO Implement emotion detection
+                    return "Analysis not implemented";
 
-                    if (result.Any())
-                    {
-                        var emotion = result.First().FaceAttributes.Emotion;
-                        return GetPrimaryEmotion(emotion);
-                    }
-                    else
-                    {
-                        return "No face detected";
-                    }
+
+
+
+
+
+
+
                 }
             }
             catch (Exception)

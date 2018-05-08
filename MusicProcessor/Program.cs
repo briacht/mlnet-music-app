@@ -15,7 +15,7 @@ namespace MusicProcessor
             var json = File.ReadAllText(path);
             var song = JsonConvert.DeserializeObject<List<MusicMeasure>>(json);
 
-            var repairer = new MusicRepairer("../../../../IntelligentDemo/Services/MusicModel.zip");
+            var repairer = new MusicRepairer("../../../../IntelligentDemo/MusicModel.zip");
             repairer.Repair(song);
 
             json = JsonConvert.SerializeObject(song);
