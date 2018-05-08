@@ -124,7 +124,6 @@ namespace MusicModel
         {
             Console.WriteLine();
             Console.WriteLine("------ Model Testing ------");
-            var model = await PredictionModel.ReadAsync<NotePredictionInput, PredictedNote>(modelPath);
 
             var input = new NotePredictionInput
             {
