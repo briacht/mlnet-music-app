@@ -7,7 +7,7 @@ namespace MusicModel
         // Column 0 & 1 are not needed for prediction
 
         [Column("2")]
-        public float Label; // This is NoteNumber
+        public float NoteNumber;
         [Column("3")]
         public float KeySignature;
         [Column("4")]
