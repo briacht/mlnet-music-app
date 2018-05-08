@@ -8,6 +8,7 @@
                 separator: ","));  
 
 3 Calculate Label
+            pipeline.Add(new ColumnCopier(("NoteNumber", "Label")));
             pipeline.Add(new Dictionarizer("Label"));
 
 4 Calculate Features
@@ -39,14 +40,22 @@
             var model = pipeline.Train<NotePredictionInput, PredictedNote>();
             await model.WriteAsync(modelPath);
 
-8 Test
+-------------------------------------------------------------------------------------------
+
+1 Load Model
+
+            var model = await PredictionModel
+                .ReadAsync<NotePredictionInput, PredictedNote>(modelPath);
+
+2 Test
             var result = model.Predict(input);
             Console.WriteLine($"Predicted {result.NoteNumber}");
 
-
+----------------------------------------
 
 1 Load Model
-            var model = await PredictionModel.ReadAsync<NotePredictionInput, PredictedNote>(_modelPath);
+            var model = await PredictionModel
+                .ReadAsync<NotePredictionInput, PredictedNote>(_modelPath);
 
 2 Predict
                     var feature = BuildFeature(knownNotes);
