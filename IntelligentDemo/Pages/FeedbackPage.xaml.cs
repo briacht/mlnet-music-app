@@ -1,7 +1,9 @@
 ﻿using IntelligentDemo.Convertors;
 using IntelligentDemo.Models;
 using IntelligentDemo.Services;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -29,8 +31,25 @@ namespace IntelligentDemo.Pages
             if (!initialized)
             {
                 initialized = true;
-                var data = await _feedbackService.GetFeedback();
-                DetailsList.ItemsSource = data;
+                if (App.OfflineMode)
+                {
+                    var json = File.ReadAllText("Offline/OfflineFeedback.json");
+                    var data = JsonConvert.DeserializeObject<Feedback[]>(json);
+                    DetailsList.ItemsSource = data;
+                }
+                else
+                {
+                    try
+                    {
+
+                        var data = await _feedbackService.GetFeedback();
+                        DetailsList.ItemsSource = data;
+                    }
+                    catch (Exception)
+                    {
+                        Message.Text = "Failed to connect to service";
+                    }
+                }
 
                 _songController.BarStarted += SongController_BarStarted;
             }

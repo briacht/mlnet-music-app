@@ -37,7 +37,7 @@ namespace IntelligentDemo.Services
             }
             catch (Exception)
             {
-                return "API error";
+                return "Could not connect";
             }
         }
 
@@ -58,7 +58,7 @@ namespace IntelligentDemo.Services
             }
             catch (Exception)
             {
-                return "API error";
+                return "Could not connect";
             }
         }
 

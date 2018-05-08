@@ -1,14 +1,18 @@
 ﻿using IntelligentDemo.Services;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
+using Tweetinvi.Streaming;
 
 namespace IntelligentDemo.Pages
 {
@@ -18,11 +22,15 @@ namespace IntelligentDemo.Pages
     public partial class TwitterPage : UserControl, IDisposable
     {
         private const double DEFAULT_VOLUME = 0.75;
-        private const string HASHTAG = "#mldemotest";
+        private const string HASHTAG = "#mlnetdemo";
+
+        private ConcurrentQueue<Models.Tweet> _tweetQueue = new ConcurrentQueue<Models.Tweet>();
+        private DispatcherTimer _tweetQueueTimer;
 
         private PercussionGenerator _percussionGenerator = new PercussionGenerator();
         private EmotionService _emotionService = new EmotionService();
         private SongController _songController;
+
         private Task _streamTask;
         private int? _nextIndex;
         bool processingAutoMove;
@@ -48,9 +56,20 @@ namespace IntelligentDemo.Pages
                 VolumeSlider.Value = DEFAULT_VOLUME * 100;
                 HashTagDisplay.Text = HASHTAG;
 
-                LoadTestTweets();
-                await LoadRecentTweets();
-                ConnectToTwitterStream();
+                if (App.OfflineMode)
+                {
+                    LoadSampleTweets();
+                }
+                else
+                {
+                    await LoadRecentTweets();
+                    ConnectToTwitterStream();
+
+                    ProcessTweetQueue();
+                    _tweetQueueTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+                    _tweetQueueTimer.Tick += (_, __) => ProcessTweetQueue();
+                    _tweetQueueTimer.Start();
+                }
 
                 _songController.BarStarted += Controller_BarStarted;
             }
@@ -72,40 +91,33 @@ namespace IntelligentDemo.Pages
             {
                 foreach (var tweet in search.Take(20))
                 {
-                    await Process(tweet);
+                    await ProcessIncomingTweet(tweet);
                 }
             }
         }
 
-        private void LoadTestTweets()
+        private void LoadSampleTweets()
         {
-            Tweets.Add(new Models.Tweet
+            var json = System.IO.File.ReadAllText("Offline/OfflineTweets.json");
+            var tweets = JsonConvert.DeserializeObject<Models.Tweet[]>(json);
+            foreach (var tweet in tweets)
             {
-                ImageUrl = "https://pbs.twimg.com/media/DcKzkzbUQAA6c1u.jpg",
-                Text = "This is a really long tweet that will reach the 280 character limit of Twitter, plus the API we are using will also stick the image URL on the end of the message, so we'll include that too just to make sure we get the most text we possibly can into this very long Tweet thing. Yay",
-                Emotion = "contempt",
-                Handle = "testuser99",
-                Name = "John Doe"
-            });
-            Tweets.Add(new Models.Tweet
-            {
-                ImageUrl = "https://pbs.twimg.com/media/Dbl1dkuV0AAJFeP.jpg",
-                Text = HASHTAG,
-                Emotion = "sadness",
-                Handle = "someperson",
-                Name = "Peter Doe"
-            });
+                tweet.ImageUrl = System.IO.Path.GetFullPath(tweet.ImageUrl);
+                Tweets.Add(tweet);
+            }
         }
 
-        private void ConnectToTwitterStream()
+        private IFilteredStream _twitterStream;
+        private async Task ConnectToTwitterStream()
         {
             var stream = Stream.CreateFilteredStream();
             stream.AddTrack(HASHTAG);
-            stream.MatchingTweetReceived += async (s, e) => await Process(e.Tweet);
-            _streamTask = stream.StartStreamMatchingAllConditionsAsync();
+            stream.MatchingTweetReceived += async (s, e) => await ProcessIncomingTweet(e.Tweet);
+            _twitterStream = stream;
+            await stream.StartStreamMatchingAllConditionsAsync();
         }
 
-        private async Task Process(ITweet tweet)
+        private async Task ProcessIncomingTweet(ITweet tweet)
         {
             if (tweet.Media.Count != 0 && tweet.Media[0].MediaType == "photo" && tweet.IsRetweet == false && tweet.InReplyToUserId == null)
             {
@@ -121,7 +133,20 @@ namespace IntelligentDemo.Pages
                     Name = tweet.CreatedBy.Name
                 };
 
-                App.Current.Dispatcher.Invoke(() => Tweets.Add(result));
+                _tweetQueue.Enqueue(result);
+            }
+        }
+
+        private void ProcessTweetQueue()
+        {
+            // Don't take too many, so we don't go over Congnitive quota
+            Models.Tweet tweet;
+            for (int i = 0; i < 5; i++)
+            {
+                if(_tweetQueue.TryDequeue(out tweet))
+                {
+                    Tweets.Add(tweet);
+                }
             }
         }
 

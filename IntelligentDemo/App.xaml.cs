@@ -23,6 +23,7 @@ namespace IntelligentDemo
 
         public static Secrets Secrets { get; } = Secrets.Load();
 
+        public static bool OfflineMode = false;
     }
 
     public class Secrets

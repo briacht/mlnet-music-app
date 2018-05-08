@@ -23,6 +23,7 @@ namespace IntelligentDemo.Pages
         private EmotionService _emotionService = new EmotionService();
         private SongController _songController;
         private int? _nextIndex;
+        private int _offlineCount;
         bool processingAutoMove;
         bool playing;
         bool initialized;
@@ -143,7 +144,16 @@ namespace IntelligentDemo.Pages
             var bmp = new BitmapImage(new Uri(img));
 
             var result = new FeedbackViewModel { Emotion = "Analyzing...", Image = bmp };
-            result.Emotion = await _emotionService.DetectEmotionFromFile(path);
+            if (App.OfflineMode)
+            {
+                var offline = new string[] { "Happiness", "Surprise", "Anger", "Sadness" };
+                result.Emotion = offline[_offlineCount % offline.Length];
+                _offlineCount++;
+            }
+            else
+            {
+                result.Emotion = await _emotionService.DetectEmotionFromFile(path);
+            }
             Images.Add(result);
 
             CaptureLight.Visibility = Visibility.Hidden;
