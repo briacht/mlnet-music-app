@@ -1,0 +1,51 @@
+1 Create Pipeline
+            var pipeline = new LearningPipeline();
+
+2 Load Data
+            pipeline.Add(new TextLoader<NotePredictionInput>(dataPath, useHeader: true, separator: ","));
+
+3 Calculate Label
+            pipeline.Add(new Dictionarizer("Label"));
+
+4 Calculate Features
+            pipeline.Add(new ColumnConcatenator("Features",
+                "KeySignature",
+                "Note0_Present",
+                "Note1_Present",
+                "Note2_Present",
+                "Note3_Present",
+                "Note4_Present",
+                "Note5_Present",
+                "Note6_Present",
+                "Note7_Present",
+                "Note8_Present",
+                "Note9_Present",
+                "Note10_Present",
+                "Note11_Present"));
+
+5 Add Trainer
+            pipeline.Add(new StochasticDualCoordinateAscentClassifier());
+
+6 Prediction Output
+            pipeline.Add(new PredictedLabelColumnOriginalValueConverter() { PredictedLabelColumn = "PredictedLabel" });
+
+7 Create Model
+            var model = pipeline.Train<NotePredictionInput, PredictedNote>();
+            await model.WriteAsync(modelPath);
+
+8 Test
+            var result = model.Predict(input);
+            Console.WriteLine($"Predicted {result.NoteNumber}");
+
+
+
+1 Load Model
+            var model = await PredictionModel.ReadAsync<NotePredictionInput, PredictedNote>(_modelPath);
+
+2 Predict
+                    var feature = BuildFeature(knownNotes);
+                    var result = model.Predict(feature);
+
+3 Update Note
+                    var newNote = AdjustToMeasureOctave(result.NoteNumber, knownNotes);
+                    note.Note = newNote;

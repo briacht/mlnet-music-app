@@ -19,7 +19,7 @@ namespace IntelligentDemo.Services
 
         public async Task Repair(List<MusicMeasure> measures)
         {
-            var model = await PredictionModel.ReadAsync<NotePredictionInput, PredictedNote>(_modelPath);
+            // TODO Load ML.NET model
 
             foreach (var measure in measures)
             {
@@ -29,12 +29,11 @@ namespace IntelligentDemo.Services
                         Where(n => n.Note != 0)
                         .Select(n => n.Note);
 
-                    var feature = BuildFeature(knownNotes);
+                    // TODO Implement note prediction
 
-                    var result = model.Predict(feature);
 
-                    var newNote = AdjustToMeasureOctave(result.NoteNumber, knownNotes);
-                    note.Note = newNote;
+
+
 
                     note.IsRepaired = true;
                 }

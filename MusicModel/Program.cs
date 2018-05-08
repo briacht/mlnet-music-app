@@ -20,9 +20,9 @@ namespace MusicModel
 
             ManipulateData(rawData, manipulatedData);
 
-            CreateModel(manipulatedData, model).Wait();
+            // CreateModel(manipulatedData, model).Wait();
 
-            TestModel(model).Wait();
+            // TestModel(model).Wait();
         }
 
         static void ManipulateData(string inputPath, string outputPath)
@@ -102,32 +102,22 @@ namespace MusicModel
         {
             Console.WriteLine();
             Console.WriteLine("------ Model Creation ------");
-            var pipeline = new LearningPipeline();
+            
+            // TODO Create model
 
-            pipeline.Add(new TextLoader<NotePredictionInput>(dataPath, useHeader: true, separator: ","));
 
-            pipeline.Add(new Dictionarizer("Label"));
-            pipeline.Add(new ColumnConcatenator("Features",
-                "KeySignature",
-                "Note0_Present",
-                "Note1_Present",
-                "Note2_Present",
-                "Note3_Present",
-                "Note4_Present",
-                "Note5_Present",
-                "Note6_Present",
-                "Note7_Present",
-                "Note8_Present",
-                "Note9_Present",
-                "Note10_Present",
-                "Note11_Present"));
 
-            pipeline.Add(new StochasticDualCoordinateAscentClassifier());
-            pipeline.Add(new PredictedLabelColumnOriginalValueConverter() { PredictedLabelColumn = "PredictedLabel" });
 
-            var model = pipeline.Train<NotePredictionInput, PredictedNote>();
 
-            await model.WriteAsync(modelPath);
+
+
+
+
+
+
+
+
+
         }
 
         static async Task TestModel(string modelPath)
@@ -143,8 +133,8 @@ namespace MusicModel
                 Note11_Present = 1
             };
 
-            var result = model.Predict(input);
-            Console.WriteLine($"Predicted {result.NoteNumber}");
+            // TODO Predict missing note
+            Console.WriteLine($"Predicted ??");
         }
     }
 }
