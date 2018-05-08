@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MusicModel
 {
@@ -19,9 +20,9 @@ namespace MusicModel
 
             ManipulateData(rawData, manipulatedData);
 
-            CreateModel(manipulatedData, model);
+            CreateModel(manipulatedData, model).Wait();
 
-            TestModel(model);
+            TestModel(model).Wait();
         }
 
         static void ManipulateData(string inputPath, string outputPath)
@@ -97,7 +98,7 @@ namespace MusicModel
             Console.WriteLine("done");
         }
 
-        static void CreateModel(string dataPath, string modelPath)
+        static async Task CreateModel(string dataPath, string modelPath)
         {
             Console.WriteLine();
             Console.WriteLine("------ Model Creation ------");
@@ -126,14 +127,14 @@ namespace MusicModel
 
             var model = pipeline.Train<NotePredictionInput, PredictedNote>();
 
-            model.WriteAsync(modelPath);
+            await model.WriteAsync(modelPath);
         }
 
-        static void TestModel(string modelPath)
+        static async Task TestModel(string modelPath)
         {
             Console.WriteLine();
             Console.WriteLine("------ Model Testing ------");
-            var model = PredictionModel.ReadAsync<NotePredictionInput, PredictedNote>(modelPath).Result;
+            var model = await PredictionModel.ReadAsync<NotePredictionInput, PredictedNote>(modelPath);
 
             var input = new NotePredictionInput
             {

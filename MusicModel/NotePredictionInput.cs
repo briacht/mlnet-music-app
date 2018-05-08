@@ -4,12 +4,10 @@ namespace MusicModel
 {
     public class NotePredictionInput
     {
-        [Column("0")]
-        public float Chorale;
-        [Column("1")]
-        public float Measure;
-        [Column("2", "Label")]
-        public float Label;
+        // Column 0 & 1 are not needed for prediction
+
+        [Column("2")]
+        public float Label; // This is NoteNumber
         [Column("3")]
         public float KeySignature;
         [Column("4")]
@@ -37,5 +35,4 @@ namespace MusicModel
         [Column("15")]
         public float Note11_Present;
     }
-
 }
