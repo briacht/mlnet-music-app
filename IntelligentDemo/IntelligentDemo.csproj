@@ -340,6 +340,9 @@
     <None Include="Feedback.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Offline\OfflineFeedback.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Offline\OfflineTweets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
