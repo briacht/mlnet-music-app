@@ -2,7 +2,10 @@
             var pipeline = new LearningPipeline();
 
 2 Load Data
-            pipeline.Add(new TextLoader<NotePredictionInput>(dataPath, useHeader: true, separator: ","));
+            pipeline.Add(new TextLoader<NotePredictionInput>(
+                dataPath, 
+                useHeader: true, 
+                separator: ","));  
 
 3 Calculate Label
             pipeline.Add(new Dictionarizer("Label"));
@@ -27,7 +30,10 @@
             pipeline.Add(new StochasticDualCoordinateAscentClassifier());
 
 6 Prediction Output
-            pipeline.Add(new PredictedLabelColumnOriginalValueConverter() { PredictedLabelColumn = "PredictedLabel" });
+            pipeline.Add(new PredictedLabelColumnOriginalValueConverter()
+            {
+                PredictedLabelColumn = "PredictedLabel"
+            });
 
 7 Create Model
             var model = pipeline.Train<NotePredictionInput, PredictedNote>();
