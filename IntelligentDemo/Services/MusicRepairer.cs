@@ -29,7 +29,9 @@ namespace IntelligentDemo.Services
 
 
 
-                    
+
+
+
 
                     note.IsRepaired = true;
                 }
@@ -41,7 +43,7 @@ namespace IntelligentDemo.Services
             return new MusicNotes
             {
                 Chorale = 1,
-                Key = 1,
+                Key = 0,
                 N_60 = knownNotes.Contains((byte)60) ? 1 : 0,
                 N_61 = knownNotes.Contains((byte)61) ? 1 : 0,
                 N_62 = knownNotes.Contains((byte)62) ? 1 : 0,
@@ -65,25 +67,11 @@ namespace IntelligentDemo.Services
             };
         }
 
-        private byte AdjustToMeasureOctave(int note, IEnumerable<byte> knownNotes)
+        private byte ConvertToNoteNumber(string note, IEnumerable<byte> knownNotes)
         {
-            // Find note within octave that average is in
-            var avg = (int)knownNotes.Select(n => Convert.ToInt32(n)).Average();
-            var octave = avg / 12;
-            var result = octave * 12 + note;
-            
-            // Check if the corresponding note in the octave above/below
-            // is closer to the average
-            if(result - avg > 6)
-            {
-                result -= 12;
-            }
-            else if(avg - result > 6)
-            {
-                result += 12;
-            }
-
-            return (byte)result;
+            var noteNumber = ConvertNoteNameToNumber(note);
+            var adjusted = AdjustToMeasureOctave(noteNumber, knownNotes);
+            return (byte)adjusted;
         }
 
         private int ConvertNoteNameToNumber(string note)
@@ -117,6 +105,27 @@ namespace IntelligentDemo.Services
                 default:
                     throw new ArgumentException();
             }
+        }
+
+        private byte AdjustToMeasureOctave(int note, IEnumerable<byte> knownNotes)
+        {
+            // Find note within octave that average is in
+            var avg = (int)knownNotes.Select(n => Convert.ToInt32(n)).Average();
+            var octave = avg / 12;
+            var result = octave * 12 + note;
+
+            // Check if the corresponding note in the octave above/below
+            // is closer to the average
+            if (result - avg > 6)
+            {
+                result -= 12;
+            }
+            else if (avg - result > 6)
+            {
+                result += 12;
+            }
+
+            return (byte)result;
         }
 
         private PredictionModel<MusicNotes, MusicNotesPrediction> LoadModel()

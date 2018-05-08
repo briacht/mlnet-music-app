@@ -26,6 +26,13 @@ namespace IntelligentDemo.Services
                     // TODO Implement emotion detection
                     return "Analysis not implemented";
 
+
+
+
+
+
+
+
                 }
             }
             catch (Exception)
