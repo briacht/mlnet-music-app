@@ -59,7 +59,7 @@ namespace IntelligentDemo.Pages
         {
             if (playing)
             {
-                if (e.BarNumber % 4 == 1)
+                if (e.BarNumber % 2 == 1)
                 {
                     if (_nextIndex != null)
                     {
@@ -70,7 +70,7 @@ namespace IntelligentDemo.Pages
                     }
                 }
 
-                if (e.BarNumber % 4 == 0 && Images.Any())
+                if (e.BarNumber % 2 == 0 && Images.Any())
                 {
                     SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
                 }

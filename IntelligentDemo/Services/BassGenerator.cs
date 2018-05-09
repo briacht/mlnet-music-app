@@ -26,15 +26,14 @@ namespace IntelligentDemo.Services
 
             result["anger"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 36, Duration = 16, Velocity = 127, Position = 1},
+                new MusicNote{ Note = 36, Duration = 8, Velocity = 127, Position = 1},
+                new MusicNote{ Note = 36, Duration = 8, Velocity = 127, Position = 9},
             };
 
             result["contempt"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
-                new MusicNote{ Note = 36, Duration = 4, Velocity = 100, Position = 5},
-                new MusicNote{ Note = 36, Duration = 4, Velocity = 127, Position = 9},
-                new MusicNote{ Note = 36, Duration = 4, Velocity = 100, Position = 13},
+                new MusicNote{ Note = 36, Duration = 8, Velocity = 127, Position = 1},
+                new MusicNote{ Note = 36, Duration = 8, Velocity = 127, Position = 9},
             };
 
             result["disgust"] = new List<MusicNote>
@@ -46,24 +45,22 @@ namespace IntelligentDemo.Services
 
             result["fear"] = new List<MusicNote>
             {
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 1},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 3},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 5},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 7},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 9},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 11},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 13},
-                new MusicNote{ Note = 48, Duration = 2, Velocity = 100, Position = 15},
+                new MusicNote{ Note = 40, Duration = 2, Velocity = 100, Position = 1},
+                new MusicNote{ Note = 40, Duration = 2, Velocity = 100, Position = 3},
+                new MusicNote{ Note = 40, Duration = 2, Velocity = 100, Position = 5},
+                new MusicNote{ Note = 40, Duration = 2, Velocity = 100, Position = 7},
+                new MusicNote{ Note = 40, Duration = 2, Velocity = 100, Position = 9},
+                new MusicNote{ Note = 40, Duration = 2, Velocity = 100, Position = 11},
+                new MusicNote{ Note = 40, Duration = 2, Velocity = 100, Position = 13},
+                new MusicNote{ Note = 40, Duration = 2, Velocity = 100, Position = 15},
             };
 
             result["happiness"] = new List<MusicNote>
             {
                 new MusicNote{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
-                new MusicNote{ Note = 38, Duration = 2, Velocity = 127, Position = 5},
-                new MusicNote{ Note = 38, Duration = 2, Velocity = 127, Position = 7},
-                new MusicNote{ Note = 40, Duration = 4, Velocity = 127, Position = 9},
-                new MusicNote{ Note = 38, Duration = 2, Velocity = 127, Position = 13},
-                new MusicNote{ Note = 38, Duration = 2, Velocity = 127, Position = 15},
+                new MusicNote{ Note = 38, Duration = 4, Velocity = 127, Position = 5},
+                new MusicNote{ Note = 38, Duration = 4, Velocity = 127, Position = 9},
+                new MusicNote{ Note = 40, Duration = 4, Velocity = 127, Position = 13},
             };
 
             result["neutral"] = new List<MusicNote>
@@ -83,8 +80,7 @@ namespace IntelligentDemo.Services
                 new MusicNote{ Note = 36, Duration = 4, Velocity = 127, Position = 1},
                 new MusicNote{ Note = 36, Duration = 4, Velocity = 127, Position = 5},
                 new MusicNote{ Note = 36, Duration = 4, Velocity = 127, Position = 9},
-                new MusicNote{ Note = 38, Duration = 4, Velocity = 127, Position = 13},
-                new MusicNote{ Note = 40, Duration = 4, Velocity = 127, Position = 15},
+                new MusicNote{ Note = 40, Duration = 4, Velocity = 127, Position = 13},
             };
 
             return result;
