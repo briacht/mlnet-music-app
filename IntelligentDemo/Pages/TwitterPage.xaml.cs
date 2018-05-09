@@ -145,6 +145,7 @@ namespace IntelligentDemo.Pages
             {
                 if(_tweetQueue.TryDequeue(out tweet))
                 {
+                    tweet.Text = tweet.Text.Replace(HASHTAG, "");
                     Tweets.Add(tweet);
                 }
             }
