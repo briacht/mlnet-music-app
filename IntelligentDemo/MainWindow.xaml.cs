@@ -27,10 +27,15 @@ namespace IntelligentDemo
         {
             InitializeComponent();
 
-            _cameraPage = new Lazy<UIElement>(() => WrapInBorder(new CameraPage(_controller)));
-            _feedbackPage = new Lazy<UIElement>(() => WrapInBorder(new FeedbackPage(_controller)));
-            _twitterPage = new Lazy<UIElement>(() => WrapInBorder(new TwitterPage(_controller)));
-            _musicPage = new Lazy<UIElement>(() => WrapInBorder(new MusicPage(_controller)));
+            var m = new Models.Services.MelodyGenerator().GetMelody();
+            var perc = new PercussionGenerator().GetPercussionMeasure("happiness");
+            _controller.SetNextPercussionBar(perc);
+            _controller.SetNextMelodyBar(m[0].Notes);
+            _controller.Start();
+            //_cameraPage = new Lazy<UIElement>(() => WrapInBorder(new CameraPage(_controller)));
+            //_feedbackPage = new Lazy<UIElement>(() => WrapInBorder(new FeedbackPage(_controller)));
+            //_twitterPage = new Lazy<UIElement>(() => WrapInBorder(new TwitterPage(_controller)));
+            //_musicPage = new Lazy<UIElement>(() => WrapInBorder(new MusicPage(_controller)));
         }
 
         public void Dispose()
