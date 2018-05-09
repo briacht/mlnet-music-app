@@ -13,14 +13,28 @@ namespace Manipulate_data
     {
         static void Main(string[] args)
         {
-            List<string> rawData = ReadInCSV("Data/chorales.csv");
+            ModifyTrainData();
+            ModifyTestData();
+        }
+
+        public static void ModifyTrainData()
+        {
+            List<string> rawData = ReadInCSV("Data/chorales-train.csv");
             List<string> cleanData = CleanData(rawData);
             DataTable noteData = SplitChorales(cleanData);
             DataTable measureData = ConsolidateMeasureData(noteData);
             DataTable finalTable = GetFinalTable(measureData);
-            GetFinalCSV(finalTable, "chorales-modified.csv");
+            GetFinalCSV(finalTable, "chorales-modified-train.csv");
+        }
 
-            //GetMinMax(noteData);
+        public static void ModifyTestData()
+        {
+            List<string> rawData = ReadInCSV("Data/chorales-test.csv");
+            List<string> cleanData = CleanData(rawData);
+            DataTable noteData = SplitChorales(cleanData);
+            DataTable measureData = ConsolidateMeasureData(noteData);
+            DataTable finalTable = GetFinalTable(measureData);
+            GetFinalCSV(finalTable, "chorales-modified-test.csv");
         }
 
         public static List<string> ReadInCSV(string absolutePath)
