@@ -56,9 +56,9 @@
                         </Grid>
 
                         <StackPanel>
-                            <TextBlock VerticalAlignment="Top" FontWeight="Bold" FontSize="16px" Text="{Binding Person}"></TextBlock>
-                            <TextBlock VerticalAlignment="Top" FontWeight="Bold" FontSize="16px" Text="{Binding Article}"></TextBlock>
-                            <TextBlock VerticalAlignment="Top" TextWrapping="Wrap" FontSize="16px" Text="{Binding Text}"></TextBlock>
+                            <TextBlock VerticalAlignment="Top" FontWeight="Bold" FontSize="20px" Text="{Binding Person}"></TextBlock>
+                            <TextBlock VerticalAlignment="Top" FontWeight="Bold" FontSize="20px" Text="{Binding Article}"></TextBlock>
+                            <TextBlock VerticalAlignment="Top" TextWrapping="Wrap" FontSize="18px" Text="{Binding Text}"></TextBlock>
                         </StackPanel>
 
                     </DockPanel>
