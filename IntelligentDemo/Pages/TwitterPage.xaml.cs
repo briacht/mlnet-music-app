@@ -168,7 +168,7 @@ namespace IntelligentDemo.Pages
         {
             if (playing)
             {
-                if (e.BarNumber % 4 == 1)
+                if (e.BarNumber % 2 == 1)
                 {
                     if (_nextIndex != null)
                     {
@@ -179,7 +179,7 @@ namespace IntelligentDemo.Pages
                     }
                 }
 
-                if (e.BarNumber % 4 == 0 && DetailsList.Items.Count > 0)
+                if (e.BarNumber % 2 == 0 && DetailsList.Items.Count > 0)
                 {
                     SetNext((DetailsList.SelectedIndex + 1) % DetailsList.Items.Count);
                 }

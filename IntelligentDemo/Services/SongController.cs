@@ -152,10 +152,10 @@ namespace IntelligentDemo.Services
             {
                 // Metronome
                 // TODO calculate based on SIXTEENTHS_PER_BAR
-                commands[0].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 81, 40));
-                commands[4].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
-                commands[8].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
-                commands[12].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+                //commands[0].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 81, 40));
+                //commands[4].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+                //commands[8].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
+                //commands[12].Add(m => m.NoteOn(PERCUSSION_CHANNEL, 80, 40));
             }
 
             return commands;
