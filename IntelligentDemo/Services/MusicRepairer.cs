@@ -18,15 +18,16 @@ namespace IntelligentDemo.Services
 
         public void Repair(List<MusicMeasure> measures)
         {
-            foreach(var measure in measures)
+            // TODO Load model
+
+
+            foreach (var measure in measures)
             {
                 foreach (var note in measure.Notes.Where(n => n.Note == 0))
                 {
                     var knownNotes = measure.Notes.Where(n => n.Note != 0).Select(n => n.Note);
 
                     // TODO Implement note prediction
-
-
 
 
 
@@ -49,7 +50,7 @@ namespace IntelligentDemo.Services
                 N_62 = knownNotes.Contains((byte)62) ? 1 : 0,
                 N_63 = knownNotes.Contains((byte)63) ? 1 : 0,
                 N_64 = knownNotes.Contains((byte)64) ? 1 : 0,
-                N_65=  knownNotes.Contains((byte)65) ? 1 : 0,
+                N_65 = knownNotes.Contains((byte)65) ? 1 : 0,
                 N_66 = knownNotes.Contains((byte)66) ? 1 : 0,
                 N_67 = knownNotes.Contains((byte)67) ? 1 : 0,
                 N_68 = knownNotes.Contains((byte)68) ? 1 : 0,
