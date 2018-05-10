@@ -28,22 +28,20 @@ namespace IntelligentDemo.Convertors
         public static Color Convert(double? score)
         {
             // Green - orange - red
-            var red = System.Convert.ToByte(score <= 0.5 ? 255 : (1 - score) * 255);
-            var green = System.Convert.ToByte(score >= 0.5 ? 255 : score * 255);
-            return Color.FromArgb(255, red, green, 0);
+            if(score > 0.75)
+            {
+                return Color.FromArgb(255, 0, 255, 0);
+            }
+            else if (score < 0.25)
+            {
+                return Color.FromArgb(255, 255, 0, 0);
 
-            //if (score > 0.6)
-            //{
-            //    return Color.FromArgb(255, System.Convert.ToByte(255 * (1 - score.Value)), 255, 0);
-            //}
-            //else if (score < 0.4)
-            //{
-            //    return Color.FromArgb(255, 255, System.Convert.ToByte(score * 2 * 255), 0);
-            //}
-            //else
-            //{
-            //    return Color.FromArgb(255, System.Convert.ToByte(255 * (1 - score.Value) / 2), System.Convert.ToByte(score * 255), 255);
-            //}
+            }
+            else
+            {
+                return Color.FromArgb(255, 0, 0, 255);
+
+            }
         }
     }
 }
